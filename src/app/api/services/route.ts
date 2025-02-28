@@ -11,7 +11,7 @@ export async function GET() {
     await client.connect();
     await client.query("SET client_encoding TO 'UTF8'");
 
-    const result = await client.query('SELECT id, img, title FROM services ORDER BY id');
+    const result = await client.query('SELECT id, img, title, description, price FROM services ORDER BY id');
     return NextResponse.json(result.rows, {
       status: 200,
       headers: {

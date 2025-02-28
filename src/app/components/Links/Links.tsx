@@ -48,6 +48,8 @@ const Links = () => {
           <StyledLink href="/pages/reviews">Отзывы</StyledLink>
           <NotLink>Контакты</NotLink>
           <NotLink>Вход</NotLink>
+          <StyledLink href="/admin">Админка</StyledLink>
+
         </LinksCont>
       </Wrapper>
     </div>

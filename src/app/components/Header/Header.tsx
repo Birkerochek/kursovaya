@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import AuthButton from "../AuthButton/AuthButton";
 
 export const HeaderWrapper = styled.div`
   border-radius: 20px;
@@ -81,6 +82,7 @@ const Header = () => {
             <FeedbackText>+7 951 456 95 95</FeedbackText>
             <FeedbackButton>Оставить заявку</FeedbackButton>
           </FeedbackCont>
+          <AuthButton />
         </HeaderCont>
       </HeaderWrapper>
     </div>

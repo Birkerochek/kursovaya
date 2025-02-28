@@ -4,10 +4,12 @@ import Title from "../Title/Title";
 import { Wrapper } from "../Wrapper/Wrapper";
 import styled from "styled-components";
 
-interface ServicesDataProps {
+export interface ServicesDataProps {
   id: number;
   title: string;
   img: string;
+  description?: string;
+  price?: number;
 }
 
 export const ServicesCont = styled.div`
@@ -56,7 +58,7 @@ const Services = () => {
     <Wrapper>
       <Title>Популярные услуги</Title>
       <ServicesCont>
-        {servicesData.map((item) => (
+        {servicesData.slice(0,6).map((item) => (
           <ServiceItem key={item.id}>
             <ServiceItemImage src={item.img} alt={item.title} />
             <ServiceItemText>{item.title}</ServiceItemText>

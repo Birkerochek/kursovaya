@@ -1,8 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Wrapper } from "../Wrapper/Wrapper";
 import Title from "../Title/Title";
+
+interface FormData {
+  name: string;
+  phone: string;
+  email?: string;
+  techType: string;
+  description: string;
+}
 
 export const FeedbackCont = styled.div`
   border-radius: 20px;
@@ -90,54 +98,17 @@ const ErrorMessage = styled.span`
   padding-left: 20px;
 `;
 
-const FeedbackForm = () => {
+const FeedbackForm: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<FormData>();
 
-  const SMSRU_API_KEY = "67BD4C16-9ED1-FDE9-0838-3723174F8670"; // 🔹 Вставь сюда API-ключ от SMS.RU
-
-  // Функция отправки SMS
-  const sendSMS = async (phone, message) => {
-    const url = `https://sms.ru/sms/send?api_id=${SMSRU_API_KEY}&to=${phone}&msg=${encodeURIComponent(message)}&json=1`;
-
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      console.log("Ответ от SMS.RU:", result);
-      return result;
-    } catch (error) {
-      console.error("Ошибка при отправке SMS:", error);
-      return null;
-    }
-  };
-
-  const onSubmit = async (data) => {
-    const message = 
-      `Новая заявка!\n` +
-      `Имя: ${data.name}\n` +
-      `Номер телефона: ${data.phone}\n` +
-      `Почта: ${data.email || "не указана"}\n` +
-      `Тип техники: ${data.techType}\n` +
-      `Описание проблемы: ${data.description}`;
-
-    try {
-      // Отправка SMS
-      const smsResult = await sendSMS(data.phone, message);
-
-      if (smsResult && smsResult.status === "OK") {
-        console.log("SMS успешно отправлено!");
-      } else {
-        console.log("Ошибка при отправке SMS:", smsResult);
-      }
-
-      reset();
-    } catch (error) {
-      console.error("Ошибка при обработке формы:", error);
-    }
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
+    reset();
   };
 
   return (
@@ -154,9 +125,7 @@ const FeedbackForm = () => {
 
           <FeedbackInput
             placeholder="Номер телефона"
-            {...register("phone", {
-              required: "Поле 'Номер телефона' обязательно",
-            })}
+            {...register("phone", { required: "Поле 'Номер телефона' обязательно" })}
           />
           {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
 
@@ -173,23 +142,15 @@ const FeedbackForm = () => {
 
           <FeedbackInput
             placeholder="Тип техники"
-            {...register("techType", {
-              required: "Поле 'Тип техники' обязательно",
-            })}
+            {...register("techType", { required: "Поле 'Тип техники' обязательно" })}
           />
-          {errors.techType && (
-            <ErrorMessage>{errors.techType.message}</ErrorMessage>
-          )}
+          {errors.techType && <ErrorMessage>{errors.techType.message}</ErrorMessage>}
 
           <FeedbackTextarea
             placeholder="Описание проблемы"
-            {...register("description", {
-              required: "Поле 'Описание проблемы' обязательно",
-            })}
+            {...register("description", { required: "Поле 'Описание проблемы' обязательно" })}
           />
-          {errors.description && (
-            <ErrorMessage>{errors.description.message}</ErrorMessage>
-          )}
+          {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
 
           <FeedbackButton type="submit">Отправить</FeedbackButton>
         </FeedbackFormCont>
