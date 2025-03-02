@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Wrapper } from "../Wrapper/Wrapper";
-import { FeedbackButton } from "../Header/Header";
+import { FeedbackButton } from "../Header/HeaderStyles";
 
 export const HeroCont = styled.div`
   background-image: url("/hero.png");
@@ -50,6 +50,13 @@ export const OfferButtonTextBold = styled.span`
 `;
 
 const Hero = () => {
+  const scrollToFeedbackForm = () => {
+    const feedbackForm = document.getElementById("feedback-form");
+    if (feedbackForm) {
+      feedbackForm.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div>
       <Wrapper>
@@ -59,9 +66,9 @@ const Hero = () => {
               Выбирая нас вы выбираете долговечность своего устройства
             </OfferTitle>
             <OfferText>Более 10000 довольных клиентов</OfferText>
-            <OfferButton>
-              Оставить заявку <br /> прямо{" "}
-              <OfferButtonTextBold>сейчас!</OfferButtonTextBold>{" "}
+            <OfferButton onClick={scrollToFeedbackForm}>
+              Оставить заявку <br /> прямо {" "}
+              <OfferButtonTextBold>сейчас!</OfferButtonTextBold>
             </OfferButton>
           </OfferCont>
         </HeroCont>

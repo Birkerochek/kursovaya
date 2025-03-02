@@ -1,8 +1,8 @@
 "use client";
-import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { Wrapper } from "@/app/components/Wrapper/Wrapper";
 import { ServicesDataProps } from "@/app/components/Services/Services";
+import { FirstGridItem, LastGridItem } from "./SpecialGridItems";
 import {
   GridContainer,
   GridItem,
@@ -11,72 +11,134 @@ import {
   LoadingMessage,
   ErrorMessage,
   ServiceImage,
+  ServicePriceContainer,
+  ServicePrice,
+  MoreContainer,
+  MoreContainerText,
+  MoreContainerIcon,
+  DownCard,
+  ServiceContent,
+  UpCard,
+  AllServices,
+  AllServiceCard,
+  AllServiceImage,
+  AllServiceTitle,
+  AllServiceDescription,
+  AllServiceContent,
+  AllDownCard,
+  AllMoreContainerIcon,
+  AllMoreContainer,
+  AllMoreContainerText,
+  AllServicePriceContainer,
+  AllServicePrice,
 } from "./styles";
+import BackButton from "@/app/UI/BackButton";
 
-interface PageProps {
-  services?: ServicesDataProps[];
-}
+const ServiceCard = ({
+  service,
+  area,
+}: {
+  service: ServicesDataProps;
+  area?: string;
+}) => (
+  <GridItem $area={area}>
+    <ServiceImage src={service.img} alt={service.title} />
+    <ServiceContent>
+      
+    <ServiceTitle>{service.title}</ServiceTitle>
+    <ServiceDescription>{service.description}</ServiceDescription>
 
-// Массив с обозначениями зон для сетки
-const gridAreas = ["a", "b", "c", "e", "f", "g"];
+   
+    </ServiceContent>
+    
+    <DownCard>
+    <MoreContainer >
+      <MoreContainerText>Перейти</MoreContainerText>
+      <MoreContainerIcon src="/moreArrow.svg"/>
+    </MoreContainer>
+    <ServicePriceContainer>
+      <ServicePrice>{service.price}р</ServicePrice>
+    </ServicePriceContainer>
 
-const ServicesPage: NextPage<PageProps> = ({ services: initialServices }) => {
-  const [services, setServices] = useState<ServicesDataProps[]>(
-    initialServices || [],
-  );
-  const [loading, setLoading] = useState<boolean>(!initialServices);
+    </DownCard>
+
+  </GridItem>
+);
+
+const ServicesPage = () => {
+  const [services, setServices] = useState<ServicesDataProps[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!initialServices) {
-      setLoading(true);
-      fetch("./../../api/services")
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`Ошибка загрузки данных: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setServices(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Ошибка:", error);
-          setError(error.message || "Произошла ошибка при загрузке данных");
-          setLoading(false);
-        });
-    }
-  }, [initialServices]);
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("/api/services");
+        if (!response.ok) throw new Error("Ошибка загрузки данных");
+        const data = await response.json();
+        setServices(data);
+      } catch (err) {
+        setError("Не удалось загрузить услуги");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServices();
+  }, []);
 
-  if (loading) {
-    return (
-      <Wrapper>
-        <LoadingMessage>Загрузка услуг...</LoadingMessage>
-      </Wrapper>
-    );
-  }
-
-  if (error) {
-    return (
-      <Wrapper>
-        <ErrorMessage>{error}</ErrorMessage>
-      </Wrapper>
-    );
-  }
+  if (loading) return <LoadingMessage>Загрузка услуг...</LoadingMessage>;
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
     <Wrapper>
+      <BackButton />
       <GridContainer>
-        {services.slice(0, gridAreas.length).map((service, index) => (
-          <GridItem key={service.id || index} $area={gridAreas[index]}>
-            <ServiceImage src={service.img} alt={service.title} />
-            <ServiceTitle>{service.title}</ServiceTitle>
-            <ServiceDescription>{service.description}</ServiceDescription>
-            <ServiceDescription>{service.price}</ServiceDescription>
-          </GridItem>
-        ))}
+        <GridItem $area="special1">
+          <FirstGridItem />
+        </GridItem>
+
+       
+        {services.slice(1,5).map((index) => {
+          const arrayIndex = services.indexOf(index);
+          return (
+            <ServiceCard
+              key={services[arrayIndex]?.id}
+              service={
+                services[arrayIndex]
+              }
+              area={`service${index}`}
+            />
+          );
+        })}
+
+        <GridItem $area="special2">
+          <LastGridItem />
+        </GridItem>
       </GridContainer>
+      <AllServices>
+        {services.slice(5).map((service) => {
+          return (
+            <AllServiceCard key={service.id}>
+              <AllServiceImage src={service.img} alt={service.title} />
+              <AllServiceContent>
+                <AllServiceTitle>{service.title}</AllServiceTitle>
+                <AllServiceDescription>{service.description}</AllServiceDescription>
+
+              </AllServiceContent>
+              <AllDownCard>
+                <AllMoreContainer>
+                  <AllMoreContainerText>Перейти</AllMoreContainerText>
+                  <AllMoreContainerIcon src="/moreArrow.svg"/>
+                </AllMoreContainer>
+                <AllServicePriceContainer>
+                  <AllServicePrice>{service.price}р</AllServicePrice>
+                </AllServicePriceContainer>
+              </AllDownCard>
+            </AllServiceCard>
+          );
+        })}
+      </AllServices>
+
     </Wrapper>
   );
 };

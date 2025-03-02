@@ -20,7 +20,7 @@ export const ServicesCont = styled.div`
 export const ServiceItem = styled.div`
   border: 1px solid #000;
   border-radius: 15px;
-  width: 459px;
+  width: 447px;
   height: 308px;
   display: flex;
   flex-direction: column;

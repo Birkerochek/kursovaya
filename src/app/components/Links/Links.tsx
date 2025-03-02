@@ -2,9 +2,6 @@
 import styled from "styled-components";
 import { Wrapper } from "../Wrapper/Wrapper";
 import Link from "next/link";
-import { useState } from "react";
-import { GlobalStyles } from "@/app/GlobalStyles";
-import { signIn } from "next-auth/react";
 
 export const StyledLink = styled(Link)`
   font-family: var(--font-family);
@@ -40,7 +37,6 @@ const Links = () => {
 
   return (
     <div>
-      <GlobalStyles />
       <Wrapper>
         <LinksCont>
           <StyledLink href="/pages/catalog">Каталог услуг</StyledLink>
@@ -48,7 +44,7 @@ const Links = () => {
           <StyledLink href="/pages/reviews">Отзывы</StyledLink>
           <NotLink>Контакты</NotLink>
           <NotLink>Вход</NotLink>
-          <StyledLink href="/admin">Админка</StyledLink>
+          <StyledLink href="/pages/admin">Админка</StyledLink>
 
         </LinksCont>
       </Wrapper>

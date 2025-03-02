@@ -1,6 +1,9 @@
+"use client";
+
 import "./globals.css";
-
-
+import { GlobalStyles } from "./GlobalStyles";
+import Header from "./components/Header/Header";
+import Links from "./components/Links/Links";
 
 export default function RootLayout({
   children,
@@ -8,11 +11,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
     <html lang="en">
-      
       <body>
-        {children}
+          <GlobalStyles />
+          <Header />
+          <Links />
+          {children}
       </body>
     </html>
   );
