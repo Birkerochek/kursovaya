@@ -11,6 +11,8 @@ import {
   FeedbackButton,
   ErrorMessage,
 } from "./FeedbackFormStyles";
+import { supabase } from "../supabaseClient";
+import { sendTelegramMessage } from "@/app/lib/telegram";
 
 interface FormData {
   name: string;
@@ -35,28 +37,20 @@ const FeedbackForm: React.FC = () => {
     try {
       console.log("Sending form data:", data);
 
-      const response = await fetch("/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const { error } = await supabase.from("applications").insert([data]);
 
-      const result = await response.json();
-      console.log("Server response:", result);
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to submit application");
+      if (error) {
+        throw new Error(error.message);
       }
 
-      // Очищаем форму после успешной отправки
       reset();
       alert("Заявка успешно отправлена!");
     } catch (error) {
       console.error("Error submitting application:", error);
       alert(
-        `Произошла ошибка при отправке заявки: ${error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"}`,
+        `Произошла ошибка при отправке заявки: ${
+          error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"
+        }`
       );
     }
   };

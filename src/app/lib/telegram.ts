@@ -3,7 +3,6 @@ import pool from './db';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-// Функция для отправки сообщения конкретному пользователю
 export async function sendTelegramMessageToUser(chatId: string | number, message: string) {
   if (!TELEGRAM_BOT_TOKEN) {
     console.error('Telegram bot token is not configured');
@@ -38,7 +37,6 @@ export async function sendTelegramMessageToUser(chatId: string | number, message
   }
 }
 
-// Функция для отправки сообщения администратору
 export async function sendTelegramMessage(message: string) {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error('Telegram credentials are not configured');
@@ -73,7 +71,6 @@ export async function sendTelegramMessage(message: string) {
   }
 }
 
-// Функция для сохранения связи между номером телефона и chat_id
 export async function saveTelegramUser(phone: string, chatId: number) {
   try {
     const result = await pool.query(
@@ -91,7 +88,6 @@ export async function saveTelegramUser(phone: string, chatId: number) {
   }
 }
 
-// Функция для получения chat_id по номеру телефона
 export async function getTelegramChatId(phone: string): Promise<number | null> {
   try {
     const result = await pool.query(

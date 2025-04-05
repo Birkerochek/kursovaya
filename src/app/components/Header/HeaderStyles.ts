@@ -2,12 +2,17 @@ import styled from "styled-components";
 import Link from "next/link";
 
 export const HeaderWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   border-radius: 20px;
   max-width: 1814px;
   margin: 0 auto;
   height: 131px;
   background: #0b5c7e;
-  margin-top: 25px;
+  padding: 0 20px;
 `;
 
 export const HeaderCont = styled.div`

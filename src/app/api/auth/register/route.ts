@@ -12,7 +12,6 @@ export async function POST(request: Request) {
 
     await client.connect();
 
-    // Проверяем, существует ли пользователь с таким email
     const existingUser = await client.query(
       'SELECT * FROM users WHERE email = $1',
       [email]
@@ -25,18 +24,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Хешируем пароль
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Создаем нового пользователя
     const result = await client.query(
-      'INSERT INTO users (email, password, name, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id, email, name',
-      [email, hashedPassword, name]
+      'INSERT INTO users (email, password, name, role, created_at, updated_at) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id, email, name, role',
+      [email, hashedPassword, name, 'user']
     );
 
     await client.end();
 
-    return NextResponse.json(result.rows[0], { status: 201 });
+    // Возвращаем успешный ответ, чтобы клиент мог выполнить signIn
+    return NextResponse.json(
+      { message: 'Регистрация успешна', user: result.rows[0] },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Ошибка при регистрации:', error);
     return NextResponse.json(
@@ -44,4 +45,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

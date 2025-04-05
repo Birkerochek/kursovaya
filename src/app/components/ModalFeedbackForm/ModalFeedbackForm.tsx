@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import styled from "styled-components";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { supabase } from "../supabaseClient";
 
 const FormContainer = styled.div`
   border-radius: 20px;
@@ -105,19 +108,10 @@ const ModalFeedbackForm: React.FC = () => {
     try {
       console.log("Sending form data:", data);
 
-      const response = await fetch("/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const { error } = await supabase.from("applications").insert([data]);
 
-      const result = await response.json();
-      console.log("Server response:", result);
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to submit application");
+      if (error) {
+        throw new Error(error.message);
       }
 
       reset();
@@ -125,7 +119,9 @@ const ModalFeedbackForm: React.FC = () => {
     } catch (error) {
       console.error("Error submitting application:", error);
       alert(
-        `Произошла ошибка при отправке заявки: ${error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"}`,
+        `Произошла ошибка при отправке заявки: ${
+          error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"
+        }`
       );
     }
   };

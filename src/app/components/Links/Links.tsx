@@ -28,6 +28,7 @@ export const LinksCont = styled.div`
   align-items: center;
   gap: 65px;
   margin: 40px 0;
+  padding-top: 130px;
 ;`
 
 

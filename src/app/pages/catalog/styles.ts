@@ -170,6 +170,7 @@ export const AllMoreContainer = styled.div`
 display: flex;
 align-items: center;
 gap: 6px;
+cursor: pointer;
 `
 export const AllDownCard = styled.div`
 display: flex;
