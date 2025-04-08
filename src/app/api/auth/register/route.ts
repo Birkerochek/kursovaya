@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { email, password, name } = await request.json();
 
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: process.env.NEXT_PUBLIC_SUPABASE_URL,
     });
 
     await client.connect();
@@ -33,7 +33,6 @@ export async function POST(request: Request) {
 
     await client.end();
 
-    // Возвращаем успешный ответ, чтобы клиент мог выполнить signIn
     return NextResponse.json(
       { message: 'Регистрация успешна', user: result.rows[0] },
       { status: 201 }

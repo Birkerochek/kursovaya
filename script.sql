@@ -44,6 +44,7 @@ VALUES
   ('/service5.png', 'Силовые компоненты'),
   ('/service6.png', 'Пассивные компоненты');
 
-
-
-
+-- Создание таблицы reviews
+create table if not exists reviews (
+    id bigint primary key generated always as identity,
+    name text not null,

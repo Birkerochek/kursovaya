@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import { Wrapper } from "../Wrapper/Wrapper";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export const StyledLink = styled(Link)`
   font-family: var(--font-family);
@@ -31,10 +32,9 @@ export const LinksCont = styled.div`
   padding-top: 130px;
 ;`
 
-
-
 const Links = () => {
-
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === 'admin';
 
   return (
     <div>
@@ -44,9 +44,7 @@ const Links = () => {
           <NotLink>О компании</NotLink>
           <StyledLink href="/pages/reviews">Отзывы</StyledLink>
           <NotLink>Контакты</NotLink>
-          <NotLink>Вход</NotLink>
-          <StyledLink href="/pages/admin">Админка</StyledLink>
-
+          {isAdmin && <StyledLink href="/pages/admin">Админка</StyledLink>}
         </LinksCont>
       </Wrapper>
     </div>

@@ -1,27 +1,33 @@
 // app/api/services/route.ts
 import { NextResponse } from 'next/server';
-import { Client } from 'pg';
+import { supabase } from '@/app/components/supabaseClient';
 
 export async function GET() {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
-
   try {
-    await client.connect();
-    await client.query("SET client_encoding TO 'UTF8'");
+    const { data, error } = await supabase
+      .from('services')
+      .select('id, img, title, description, price')
+      .order('id');
 
-    const result = await client.query('SELECT id, img, title, description, price FROM services ORDER BY id');
-    return NextResponse.json(result.rows, {
+    if (error) {
+      console.error('Ошибка Supabase:', error);
+      return NextResponse.json(
+        { error: 'Ошибка при получении данных' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data, {
       status: 200,
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       }
     });
   } catch (error) {
-    console.error('Ошибка запроса:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
-  } finally {
-    await client.end();
+    console.error('Ошибка сервера:', error);
+    return NextResponse.json(
+      { error: 'Внутренняя ошибка сервера' },
+      { status: 500 }
+    );
   }
 }

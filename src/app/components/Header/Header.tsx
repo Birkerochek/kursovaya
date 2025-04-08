@@ -34,10 +34,10 @@ const Header = () => {
               Оставить заявку
             </FeedbackButton>
           </FeedbackCont>
-          <AuthButton />
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <ModalFeedbackForm />
           </Modal>
+          <AuthButton />
         </HeaderCont>
       </HeaderWrapper>
     </div>

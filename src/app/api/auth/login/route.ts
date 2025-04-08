@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { email, password } = await request.json();
 
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: process.env.NEXT_PUBLIC_SUPABASE_URL,
     });
 
     await client.connect();

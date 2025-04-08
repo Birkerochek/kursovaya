@@ -41,29 +41,62 @@ export const ServiceItemText = styled.p`
 
 const Services = () => {
   const [servicesData, setServicesData] = useState<ServicesDataProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/services")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Ошибка загрузки данных: ${res.status}`);
+    const fetchServices = async () => {
+      try {
+        console.log('Начинаем загрузку услуг...');
+        const response = await fetch('/api/services');
+        console.log('Статус ответа:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return res.json();
-      })
-      .then((data) => setServicesData(data))
-      .catch((error) => console.error("Ошибка:", error));
+        
+        const data = await response.json();
+        console.log('Полученные данные:', data);
+        
+        if (Array.isArray(data)) {
+          setServicesData(data);
+        } else {
+          console.error('Полученные данные не являются массивом:', data);
+          setError('Неверный формат данных');
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки услуг:', error);
+        setError(error instanceof Error ? error.message : 'Неизвестная ошибка');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
   }, []);
+
+  if (loading) {
+    return <div>Загрузка услуг...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка загрузки услуг: {error}</div>;
+  }
 
   return (
     <Wrapper>
       <Title>Популярные услуги</Title>
       <ServicesCont>
-        {servicesData.slice(0,6).map((item) => (
-          <ServiceItem key={item.id}>
-            <ServiceItemImage src={item.img} alt={item.title} />
-            <ServiceItemText>{item.title}</ServiceItemText>
-          </ServiceItem>
-        ))}
+        {servicesData.length === 0 ? (
+          <div>Услуги не найдены</div>
+        ) : (
+          servicesData.slice(0,6).map((item) => (
+            <ServiceItem key={item.id}>
+              <ServiceItemImage src={item.img} alt={item.title} />
+              <ServiceItemText>{item.title}</ServiceItemText>
+            </ServiceItem>
+          ))
+        )}
       </ServicesCont>
     </Wrapper>
   );
