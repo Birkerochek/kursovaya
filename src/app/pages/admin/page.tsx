@@ -7,6 +7,14 @@ import { useApplications } from "./hooks/useApplications";
 import { useMasters } from "./hooks/useMasters";
 import { ApplicationsList } from "./components/ApplicationsList";
 import MainBackButton from "@/app/UI/MainBackButton";
+import UserManagement from "./components/UserManagement";
+import styled from "styled-components";
+
+const AdminContainer = styled.div`
+display:grid;
+grid-template-columns: 2fr 1fr;
+gap: 20px;
+`
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -48,14 +56,21 @@ export default function AdminPage() {
   return (
     <div>
       <MainBackButton />
-      <ApplicationsList
-        applications={applications}
-        masters={masters}
-        onStatusChange={handleStatusChange}
-        onAssignMaster={handleAssignMaster}
-        onDelete={handleDeleteApplication}
-        loading={loading}
-      />
+      <AdminContainer>
+        <div>
+          <ApplicationsList
+            applications={applications}
+            masters={masters}
+            onStatusChange={handleStatusChange}
+            onAssignMaster={handleAssignMaster}
+            onDelete={handleDeleteApplication}
+            loading={loading}
+          />
+        </div>
+        <div>
+          <UserManagement />
+        </div>
+      </AdminContainer>
     </div>
   );
 }

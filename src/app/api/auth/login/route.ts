@@ -14,7 +14,6 @@ export async function POST(request: Request) {
 
     await client.connect();
 
-    // Ищем пользователя по email
     const result = await client.query(
       'SELECT * FROM users WHERE email = $1',
       [email]
@@ -31,7 +30,6 @@ export async function POST(request: Request) {
 
     const user = result.rows[0];
 
-    // Проверяем пароль
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
@@ -41,22 +39,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Создаем JWT токен
     const token = sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '24h' }
     );
 
-    // Устанавливаем куки
     (await cookies()).set('auth-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 86400 // 24 часа
+      maxAge: 86400 
     });
 
-    // Возвращаем данные пользователя (без пароля)
     const { password: _, ...userWithoutPassword } = user;
     return NextResponse.json(userWithoutPassword);
   } catch (error) {

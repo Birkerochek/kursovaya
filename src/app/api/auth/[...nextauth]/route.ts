@@ -22,7 +22,7 @@ const handler = NextAuth({
           }
 
           const client = new Client({
-            connectionString: process.env.NEXT_PUBLIC_SUPABASE_URL,
+            connectionString: process.env.DATABASE_URL,
           });
 
           await client.connect();
