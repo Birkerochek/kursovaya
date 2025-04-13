@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export const GridContainer = styled.div`
@@ -172,11 +173,13 @@ align-items: center;
 gap: 6px;
 cursor: pointer;
 `
-export const AllDownCard = styled.div`
+export const AllDownCard = styled(Link)`
 display: flex;
 align-items: center;
 justify-content: space-between;
 width: 98%;
+cursor: pointer;
+text-decoration: none;
 
 `
 export const AllMoreContainerText = styled.p`

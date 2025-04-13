@@ -33,6 +33,7 @@ import {
   AllServicePrice,
 } from "./styles";
 import BackButton from "@/app/UI/BackButton";
+import Link from "next/link";
 
 const ServiceCard = ({
   service,
@@ -44,24 +45,19 @@ const ServiceCard = ({
   <GridItem $area={area}>
     <ServiceImage src={service.img} alt={service.title} />
     <ServiceContent>
-      
-    <ServiceTitle>{service.title}</ServiceTitle>
-    <ServiceDescription>{service.description}</ServiceDescription>
-
-   
+      <ServiceTitle>{service.title}</ServiceTitle>
+      <ServiceDescription>{service.description}</ServiceDescription>
     </ServiceContent>
-    
-    <DownCard>
-    <MoreContainer >
-      <MoreContainerText>Перейти</MoreContainerText>
-      <MoreContainerIcon src="/moreArrow.svg"/>
-    </MoreContainer>
-    <ServicePriceContainer>
-      <ServicePrice>{service.price}р</ServicePrice>
-    </ServicePriceContainer>
 
-    </DownCard>
-
+    <AllDownCard href={`/pages/catalog/${service.id}`}>
+      <MoreContainer>
+        <MoreContainerText>Перейти</MoreContainerText>
+        <MoreContainerIcon src="/moreArrow.svg" />
+      </MoreContainer>
+      <ServicePriceContainer>
+        <ServicePrice>{service.price}р</ServicePrice>
+      </ServicePriceContainer>
+    </AllDownCard>
   </GridItem>
 );
 
@@ -97,15 +93,12 @@ const ServicesPage = () => {
           <FirstGridItem />
         </GridItem>
 
-       
-        {services.slice(1,5).map((index) => {
+        {services.slice(1, 5).map((index) => {
           const arrayIndex = services.indexOf(index);
           return (
             <ServiceCard
               key={services[arrayIndex]?.id}
-              service={
-                services[arrayIndex]
-              }
+              service={services[arrayIndex]}
               area={`service${index}`}
             />
           );
@@ -122,23 +115,26 @@ const ServicesPage = () => {
               <AllServiceImage src={service.img} alt={service.title} />
               <AllServiceContent>
                 <AllServiceTitle>{service.title}</AllServiceTitle>
-                <AllServiceDescription>{service.description}</AllServiceDescription>
-
+                <AllServiceDescription>
+                  {service.description}
+                </AllServiceDescription>
               </AllServiceContent>
-              <AllDownCard>
+             
+              <AllDownCard href={`/pages/catalog/${service.id}`}>
                 <AllMoreContainer>
                   <AllMoreContainerText>Перейти</AllMoreContainerText>
-                  <AllMoreContainerIcon src="/moreArrow.svg"/>
+                  <AllMoreContainerIcon src="/moreArrow.svg" />
                 </AllMoreContainer>
                 <AllServicePriceContainer>
                   <AllServicePrice>{service.price}р</AllServicePrice>
                 </AllServicePriceContainer>
               </AllDownCard>
+              
+              
             </AllServiceCard>
           );
         })}
       </AllServices>
-
     </Wrapper>
   );
 };

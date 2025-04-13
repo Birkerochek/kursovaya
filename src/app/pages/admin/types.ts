@@ -6,6 +6,7 @@ export interface Master {
   specialization: string;
   phone: string;
   email: string;
+  is_active: boolean;
 }
 
 export interface Application {
@@ -13,7 +14,9 @@ export interface Application {
   name: string;
   email: string;
   phone: string;
-  message: string;
+  message?: string;
+  techType: string;
+  description: string;
   service: string;
   status: "pending" | "approved" | "rejected";
   master_id: number | null;

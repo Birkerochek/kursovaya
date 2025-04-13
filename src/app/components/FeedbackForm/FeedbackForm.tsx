@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Wrapper } from "../Wrapper/Wrapper";
 import Title from "../Title/Title";
 import {
@@ -13,6 +13,7 @@ import {
 } from "./FeedbackFormStyles";
 import { supabase } from "../supabaseClient";
 import { sendTelegramMessage } from "@/app/lib/telegram";
+import { PatternFormat } from "react-number-format";
 
 interface FormData {
   name: string;
@@ -31,6 +32,7 @@ const FeedbackForm: React.FC = () => {
     formState: { errors },
     reset,
     setError,
+    control
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -42,7 +44,17 @@ const FeedbackForm: React.FC = () => {
       if (error) {
         throw new Error(error.message);
       }
-
+      const telegramMessage = `
+      🔔 Новая заявка!
+      
+      👤 Имя: ${data.name}
+      📱 Телефон: ${data.phone}
+      ${data.email ? `📧 Email: ${data.email}` : ''}
+      🔧 Тип техники: ${data.techType}
+      📝 Описание: ${data.description}
+          `.trim();
+      
+          await sendTelegramMessage(telegramMessage);
       reset();
       alert("Заявка успешно отправлена!");
     } catch (error) {
@@ -67,12 +79,28 @@ const FeedbackForm: React.FC = () => {
           />
           {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
 
-          <FeedbackInput
-            placeholder="Номер телефона"
-            {...register("phone", {
-              required: "Поле 'Номер телефона' обязательно",
-            })}
-          />
+          <Controller
+  name="phone"
+  control={control} 
+  rules={{
+    required: "Поле 'Номер телефона' обязательно",
+    pattern: {
+      value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+      message: "Неверный формат номера телефона",
+    }
+  }}
+  render={({ field }) => (
+    <FeedbackInput
+      as={PatternFormat}
+      format="+7 (###) ###-##-##"
+      placeholder="Номер телефона"
+      value={field.value}
+      onValueChange={(values) => {
+        field.onChange(values.formattedValue);
+      }}
+    />
+  )}
+/>
           {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
 
           <FeedbackInput

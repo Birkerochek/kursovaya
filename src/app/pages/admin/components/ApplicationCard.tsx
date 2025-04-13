@@ -10,6 +10,8 @@ import {
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { StyledCard, DeleteButton, StatusChip } from "./StyledComponents";
 import { Application, Master } from "../types";
+import { sendTelegramMessage } from "@/app/lib/telegram";
+import { supabase } from "@/app/components/supabaseClient";
 
 interface ApplicationCardProps {
   application: Application;
@@ -39,10 +41,60 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   onAssignMaster,
   onDelete,
 }) => {
+  console.log(masters);
+  const handleStatusChange = async (applicationId: number, newStatus: string) => {
+    try {
+      await onStatusChange(applicationId, newStatus);
+      
+      const statusMessage = `
+  📋 Обновление заявки #${applicationId}
+  
+  👤 Клиент: ${application.name}
+  📱 Телефон: ${application.phone}
+  ${application.email ? `✉️ Email: ${application.email}` : ''}
+  🔧 Услуга: ${application.techType}
+  📝 Сообщение: ${application.description}
+  
+  📊 Новый статус: ${getStatusLabel(newStatus)}
+  
+  #обновление_заявки`.trim();
+  
+      await sendTelegramMessage(statusMessage);
+    } catch (error) {
+      console.error('Error sending status change notification:', error);
+    }
+  };
+  
+  const handleMasterAssign = async (applicationId: number, masterId: number) => {
+    try {
+      await onAssignMaster(applicationId, masterId);
+      
+      const selectedMaster = masters.find(m => m.id === masterId);
+      const masterMessage = `
+  📋 Обновление заявки #${applicationId}
+  
+  👤 Клиент: ${application.name}
+  📱 Телефон: ${application.phone}
+  ${application.email ? `✉️ Email: ${application.email}` : ''}
+  🔧 Услуга: ${application.techType}
+  📝 Сообщение: ${application.description}
+  
+  👨‍🔧 Назначенный мастер:
+  👤 ${selectedMaster ? selectedMaster.name : 'Не назначен'}
+  🛠️ ${selectedMaster ? selectedMaster.specialization : ''}
+  
+  #обновление_заявки`.trim();
+  
+      await sendTelegramMessage(masterMessage);
+    } catch (error) {
+      console.error('Error sending master assignment notification:', error);
+    }
+  };
   return (
     <StyledCard>
       <DeleteButton
         onClick={() => onDelete(application.id)}
+        
         color="error"
         size="small"
         title="Удалить заявку"
@@ -81,14 +133,14 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <Typography variant="subtitle2" color="textSecondary">
               Услуга
             </Typography>
-            <Typography variant="body1">{application.service}</Typography>
+            <Typography variant="body1">{application.techType}</Typography>
           </Box>
 
           <Box>
             <Typography variant="subtitle2" color="textSecondary">
               Сообщение
             </Typography>
-            <Typography variant="body2">{application.message}</Typography>
+            <Typography variant="body2">{application.description}</Typography>
           </Box>
 
           <Box>
@@ -97,7 +149,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </Typography>
             <Select
               value={application.status}
-              onChange={(e) => onStatusChange(application.id, e.target.value)}
+              onChange={(e) => handleStatusChange(application.id, e.target.value)}
               size="small"
               fullWidth
             >
@@ -114,7 +166,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <Select
               value={application.master_id || ""}
               onChange={(e) =>
-                onAssignMaster(application.id, Number(e.target.value))
+                handleMasterAssign(application.id, Number(e.target.value))
               }
               size="small"
               fullWidth

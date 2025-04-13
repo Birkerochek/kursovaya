@@ -2,8 +2,10 @@
 
 import React from "react";
 import styled from "styled-components";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { supabase } from "../supabaseClient";
+import { PatternFormat } from "react-number-format";
+import { sendTelegramMessage } from "@/app/lib/telegram";
 
 const FormContainer = styled.div`
   border-radius: 20px;
@@ -102,6 +104,7 @@ const ModalFeedbackForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    control
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -113,7 +116,17 @@ const ModalFeedbackForm: React.FC = () => {
       if (error) {
         throw new Error(error.message);
       }
-
+      const telegramMessage = `
+      🔔 Новая заявка!
+      
+      👤 Имя: ${data.name}
+      📱 Телефон: ${data.phone}
+      ${data.email ? `📧 Email: ${data.email}` : ''}
+      🔧 Тип техники: ${data.techType}
+      📝 Описание: ${data.description}
+          `.trim();
+      
+          await sendTelegramMessage(telegramMessage);
       reset();
       alert("Заявка успешно отправлена!");
     } catch (error) {
@@ -136,12 +149,28 @@ const ModalFeedbackForm: React.FC = () => {
         />
         {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
 
-        <Input
-          placeholder="Номер телефона"
-          {...register("phone", {
-            required: "Поле 'Номер телефона' обязательно",
-          })}
-        />
+        <Controller
+  name="phone"
+  control={control} 
+  rules={{
+    required: "Поле 'Номер телефона' обязательно",
+    pattern: {
+      value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+      message: "Неверный формат номера телефона",
+    }
+  }}
+  render={({ field }) => (
+    <Input
+      as={PatternFormat}
+      format="+7 (###) ###-##-##"
+      placeholder="Номер телефона"
+      value={field.value}
+      onValueChange={(values) => {
+        field.onChange(values.formattedValue);
+      }}
+    />
+  )}
+/>
         {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
 
         <Input
