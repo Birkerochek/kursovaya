@@ -16,8 +16,10 @@ import {
   FeedbackButton,
   SearchResults,
   SearchResultItem,
+  MenuButton,
 } from "./HeaderStyles";
 import Link from "next/link";
+
 interface ISearchResult {
   id: number;
   title: string;
@@ -28,6 +30,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ISearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const searchServices = async () => {
@@ -58,47 +61,53 @@ const Header = () => {
   }, [searchQuery]);
 
   return (
-    <div>
-      <HeaderWrapper>
-        <HeaderCont>
-          <Left>
-            <LogoCont href="/">
-              <Logo src="/logo.svg" alt="logo" />
-            </LogoCont>
-            <div style={{ position: 'relative' }}>
-              <FindService 
-                placeholder="Найти услугу" 
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchResults.length > 0 && (
-                <SearchResults>
-                  {searchResults.map((service: any) => (
-                    <Link href={`/pages/catalog/${service.id}`} key={service.id} style={{ textDecoration: 'none' }}>
-                      <SearchResultItem>
-                        {service.title}
-                      </SearchResultItem>
-                    </Link>
-                  ))}
-                </SearchResults>
-              )}
-            </div>
-          </Left>
+    <HeaderWrapper>
+      <HeaderCont>
+        <Left>
+          <LogoCont href="/">
+            <Logo src="/logo.svg" alt="Логотип" loading="lazy" />
+          </LogoCont>
+          <div style={{ position: "relative", flex: 1 }}>
+            <FindService
+              placeholder="Найти услугу"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Поиск услуг"
+            />
+            {searchResults.length > 0 && (
+              <SearchResults>
+                {searchResults.map((service) => (
+                  <Link
+                    href={`/pages/catalog/${service.id}`}
+                    key={service.id}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <SearchResultItem>{service.title}</SearchResultItem>
+                  </Link>
+                ))}
+              </SearchResults>
+            )}
+          </div>
+        </Left>
 
-          <FeedbackCont>
-            <FeedbackText>+7 951 456 95 95</FeedbackText>
-            <FeedbackButton onClick={() => setIsModalOpen(true)}>
-              Оставить заявку
-            </FeedbackButton>
-          </FeedbackCont>
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <ModalFeedbackForm />
-          </Modal>
+        <FeedbackCont style={{ display: isMenuOpen ? "flex" : "" }}>
+          <FeedbackText>+7 951 456 95 95</FeedbackText>
+          <FeedbackButton onClick={() => setIsModalOpen(true)}>
+            Оставить заявку
+          </FeedbackButton>
           <AuthButton />
-        </HeaderCont>
-      </HeaderWrapper>
-    </div>
+        </FeedbackCont>
+
+        <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          ☰
+        </MenuButton>
+
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <ModalFeedbackForm />
+        </Modal>
+      </HeaderCont>
+    </HeaderWrapper>
   );
 };
 

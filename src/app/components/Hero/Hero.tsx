@@ -11,6 +11,7 @@ export const HeroCont = styled.div`
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
+  border-radius: 0 15px 15px 0;
 `;
 
 export const OfferCont = styled.div`
