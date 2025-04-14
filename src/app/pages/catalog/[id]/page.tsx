@@ -10,9 +10,9 @@ interface ServiceData {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getService(id: string): Promise<ServiceData | null> {
@@ -35,7 +35,8 @@ async function getService(id: string): Promise<ServiceData | null> {
   }
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const service = await getService(params.id);
 
   if (!service) {
