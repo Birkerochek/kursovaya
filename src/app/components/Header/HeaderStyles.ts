@@ -52,6 +52,34 @@ export const FindService = styled.input`
   }
 `;
 
+export const SearchResults = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 5px;
+`;
+
+export const SearchResultItem = styled.div`
+  padding: 12px 20px;
+  cursor: pointer;
+  color: #000;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &:last-child {
+    border-radius: 0 0 15px 15px;
+  }
+`;
+
 export const FeedbackCont = styled.div`
   display: flex;
   gap: 62px;
