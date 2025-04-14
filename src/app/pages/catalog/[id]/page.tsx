@@ -9,6 +9,12 @@ interface ServiceData {
   img: string;
 }
 
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
 async function getService(id: string): Promise<ServiceData | null> {
   try {
     const { data, error } = await supabase
@@ -29,7 +35,7 @@ async function getService(id: string): Promise<ServiceData | null> {
   }
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: PageProps) {
   const service = await getService(params.id);
 
   if (!service) {
