@@ -14,7 +14,7 @@ export const SpecialItemContainer = styled.div`
 
 export const Title = styled.h2`
   font-size: clamp(20px, 4vw, 32px);
-  color: #2573D8;
+  color: #163E72;
   margin-bottom: 1rem;
 `;
 
@@ -26,7 +26,7 @@ export const Description = styled.p`
 `;
 
 export const ActionButton = styled.button`
-  background: #2573D8;
+  background: #163E72;
   color: white;
   padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
   border: none;

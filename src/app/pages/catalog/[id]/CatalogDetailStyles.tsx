@@ -44,7 +44,7 @@ align-items: center;
 `
 export const ServiceTitle = styled.h1`
   font-size: 2.5rem;
-  color: #0b5c7e;
+  color: #163E72;
   margin-bottom: 1rem;
 `;
 
@@ -56,7 +56,7 @@ export const ServiceDescription = styled.p`
 `;
 
 export const PriceContainer = styled.div`
-  background: #0b5c7e;
+  background: #163E72;
   color: white;
   padding: 1rem 2rem;
   border-radius: 10px;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const GridContainer = styled.div`
   display: grid;
-  gap: 2vw; /* Relative gap */
+  gap: 2vw; 
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
@@ -88,7 +88,7 @@ export const ServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #2573D8;
+  background: #163E72;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -194,7 +194,7 @@ export const AllServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #2573D8;
+  background: #163E72;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -238,7 +238,7 @@ export const AllServicePrice = styled.p`
 `;
 
 export const Mark = styled.mark`
-background: #0B5C7E;
+background: #2573D8;
 border-radius: 5px;
 padding: 2px 5px;
 color: #fff;
