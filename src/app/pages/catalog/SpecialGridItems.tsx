@@ -3,33 +3,33 @@ import styled from "styled-components";
 import Modal from "@/app/components/Modal/Modal";
 import ModalFeedbackForm from "@/app/components/ModalFeedbackForm/ModalFeedbackForm";
 
-const SpecialItemContainer = styled.div`
-  padding: 1.5rem;
+export const SpecialItemContainer = styled.div`
+  padding: clamp(1rem, 3vw, 1.5rem);
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
 
-const Title = styled.h2`
-  font-size: 32px;
+export const Title = styled.h2`
+  font-size: clamp(20px, 4vw, 32px);
   color: #1b3764;
   margin-bottom: 1rem;
 `;
 
-const Description = styled.p`
-  font-size: 18px;
+export const Description = styled.p`
+  font-size: clamp(14px, 2.5vw, 18px);
   color: #666;
   margin-bottom: 1.5rem;
 `;
 
-const ActionButton = styled.button`
+export const ActionButton = styled.button`
   background: #1b3764;
   color: white;
-  padding: 12px 24px;
+  padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
   border: none;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: clamp(12px, 2vw, 16px);
   cursor: pointer;
   transition: background 0.3s ease;
   align-self: flex-start;

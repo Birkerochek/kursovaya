@@ -2,12 +2,11 @@ import styled from "styled-components";
 import Link from "next/link";
 
 export const HeaderWrapper = styled.header`
-  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  max-width: 1814px;
+  max-width: 99%;
   margin: 0 auto;
   background: #0b5c7e;
   padding: 0 20px;
@@ -42,6 +41,7 @@ export const HeaderCont = styled.div`
   justify-content: space-between;
   height: 100%;
   gap: 20px;
+  position: relative;
 
   @media (max-width: 768px) {
     gap: 10px;
@@ -95,8 +95,7 @@ export const Left = styled.div`
 export const FindService = styled.input`
   border: 1px solid #fff;
   border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
+  width: 30%;
   height: 40px;
   padding: 0 15px;
   background: transparent;
@@ -114,9 +113,9 @@ export const FindService = styled.input`
   }
 
   @media (max-width: 1024px) {
-    max-width: 400px;
     height: 36px;
     font-size: 15px;
+    width:50%;
 
     &::placeholder {
       font-size: 15px;
@@ -124,17 +123,14 @@ export const FindService = styled.input`
   }
 
   @media (max-width: 768px) {
-    max-width: 250px;
     height: 32px;
     font-size: 14px;
-
     &::placeholder {
       font-size: 14px;
     }
   }
 
   @media (max-width: 480px) {
-    max-width: 150px;
     height: 28px;
     font-size: 12px;
     padding: 0 10px;
@@ -195,17 +191,14 @@ export const FeedbackCont = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: 20px;
 
   @media (max-width: 1024px) {
     gap: 15px;
   }
 
   @media (max-width: 768px) {
-    gap: 10px;
-  }
-
-  @media (max-width: 480px) {
-    display: none; 
+    display: none;
   }
 `;
 
@@ -263,7 +256,35 @@ export const MenuButton = styled.button`
   font-size: 24px;
   cursor: pointer;
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: block;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
+`;
+
+export const MobileMenu = styled.div`
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  background: #0b5c7e;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    right: 8px;
   }
 `;

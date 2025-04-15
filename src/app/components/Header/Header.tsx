@@ -17,6 +17,7 @@ import {
   SearchResults,
   SearchResultItem,
   MenuButton,
+  MobileMenu,
 } from "./HeaderStyles";
 import Link from "next/link";
 
@@ -30,7 +31,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ISearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const searchServices = async () => {
@@ -59,6 +60,10 @@ const Header = () => {
     const debounceTimer = setTimeout(searchServices, 300);
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <HeaderWrapper>
@@ -91,7 +96,11 @@ const Header = () => {
           </div>
         </Left>
 
-        <FeedbackCont style={{ display: isMenuOpen ? "flex" : "" }}>
+        <MenuButton onClick={toggleMobileMenu} aria-label="Toggle menu">
+          {isMobileMenuOpen ? "✕" : "☰"}
+        </MenuButton>
+
+        <FeedbackCont>
           <FeedbackText>+7 951 456 95 95</FeedbackText>
           <FeedbackButton onClick={() => setIsModalOpen(true)}>
             Оставить заявку
@@ -99,9 +108,15 @@ const Header = () => {
           <AuthButton />
         </FeedbackCont>
 
-        <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          ☰
-        </MenuButton>
+        {isMobileMenuOpen && (
+          <MobileMenu>
+            <FeedbackText>+7 951 456 95 95</FeedbackText>
+            <FeedbackButton onClick={() => setIsModalOpen(true)}>
+              Оставить заявку
+            </FeedbackButton>
+            <AuthButton />
+          </MobileMenu>
+        )}
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <ModalFeedbackForm />

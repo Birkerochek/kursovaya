@@ -5,6 +5,7 @@ import { GlobalStyles } from "./GlobalStyles";
 import Header from "./components/Header/Header";
 import Links from "./components/Links/Links";
 import AuthProvider from "./providers/AuthProvider";
+import Footer from "./components/Footer/Footer";
 
 export default function RootLayout({
   children,
@@ -19,6 +20,7 @@ export default function RootLayout({
           <Header />
           <Links />
           {children}
+          <Footer/>
         </AuthProvider>
       </body>
     </html>

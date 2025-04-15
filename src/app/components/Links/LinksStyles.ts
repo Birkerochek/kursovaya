@@ -13,7 +13,7 @@ export const StyledLink = styled(Link)`
   &:hover,
   &:active {
     text-decoration: none;
-    color: #2573d8; /* Цвет при наведении для визуального отклика */
+    color: #2573d8; 
   }
 
   @media (max-width: 1024px) {
@@ -58,18 +58,14 @@ export const LinksCont = styled.div`
   display: flex;
   align-items: center;
   gap: 65px;
-  margin: 40px 0;
-  padding-top: 130px;
-
+  margin: 30px 0;
   @media (max-width: 1024px) {
     gap: 40px;
-    padding-top: 100px;
     margin: 30px 0;
   }
 
   @media (max-width: 768px) {
     gap: 20px;
-    padding-top: 80px;
     margin: 20px 0;
     flex-wrap: wrap;
     justify-content: center;
@@ -78,7 +74,6 @@ export const LinksCont = styled.div`
   @media (max-width: 480px) {
     flex-direction: column;
     gap: 15px;
-    padding-top: 60px;
     margin: 15px 0;
     align-items: flex-start;
   }

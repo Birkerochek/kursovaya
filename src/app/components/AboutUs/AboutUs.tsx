@@ -13,7 +13,7 @@ const AboutUs: React.FC = () => {
   return (
     <Wrapper>
       <Title>О нас</Title>
-      <AboutUsContainer>
+      <AboutUsContainer id="aboutUs">
         <TextContent>
           <Description>
             RemTopia - ваш надежный партнер в ремонте и обслуживании техники. Мы

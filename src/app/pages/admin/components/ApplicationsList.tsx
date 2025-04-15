@@ -31,7 +31,7 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
           Управление заявками
         </Typography>
         <Grid container spacing={3}>
-          {applications.map((application) => (
+          {applications.slice().reverse().map((application) => (
             <Grid item xs={12} sm={6} md={4} key={application.id}>
               <ApplicationCard
                 application={application}

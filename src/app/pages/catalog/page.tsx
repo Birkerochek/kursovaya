@@ -18,7 +18,6 @@ import {
   MoreContainerIcon,
   DownCard,
   ServiceContent,
-  UpCard,
   AllServices,
   AllServiceCard,
   AllServiceImage,
@@ -48,7 +47,6 @@ const ServiceCard = ({
       <ServiceTitle>{service.title}</ServiceTitle>
       <ServiceDescription>{service.description}</ServiceDescription>
     </ServiceContent>
-
     <AllDownCard href={`/pages/catalog/${service.id}`}>
       <MoreContainer>
         <MoreContainerText>Перейти</MoreContainerText>
@@ -93,47 +91,37 @@ const ServicesPage = () => {
           <FirstGridItem />
         </GridItem>
 
-        {services.slice(1, 5).map((index) => {
-          const arrayIndex = services.indexOf(index);
-          return (
-            <ServiceCard
-              key={services[arrayIndex]?.id}
-              service={services[arrayIndex]}
-              area={`service${index}`}
-            />
-          );
-        })}
+        {services.slice(0, 4).map((service, index) => (
+          <ServiceCard
+            key={service.id}
+            service={service}
+            area={`service${index + 1}`}
+          />
+        ))}
 
         <GridItem $area="special2">
           <LastGridItem />
         </GridItem>
       </GridContainer>
       <AllServices>
-        {services.slice(5).map((service) => {
-          return (
-            <AllServiceCard key={service.id}>
-              <AllServiceImage src={service.img} alt={service.title} />
-              <AllServiceContent>
-                <AllServiceTitle>{service.title}</AllServiceTitle>
-                <AllServiceDescription>
-                  {service.description}
-                </AllServiceDescription>
-              </AllServiceContent>
-             
-              <AllDownCard href={`/pages/catalog/${service.id}`}>
-                <AllMoreContainer>
-                  <AllMoreContainerText>Перейти</AllMoreContainerText>
-                  <AllMoreContainerIcon src="/moreArrow.svg" />
-                </AllMoreContainer>
-                <AllServicePriceContainer>
-                  <AllServicePrice>{service.price}р</AllServicePrice>
-                </AllServicePriceContainer>
-              </AllDownCard>
-              
-              
-            </AllServiceCard>
-          );
-        })}
+        {services.slice(4).map((service) => (
+          <AllServiceCard key={service.id}>
+            <AllServiceImage src={service.img} alt={service.title} />
+            <AllServiceContent>
+              <AllServiceTitle>{service.title}</AllServiceTitle>
+              <AllServiceDescription>{service.description}</AllServiceDescription>
+            </AllServiceContent>
+            <AllDownCard href={`/pages/catalog/${service.id}`}>
+              <AllMoreContainer>
+                <AllMoreContainerText>Перейти</AllMoreContainerText>
+                <AllMoreContainerIcon src="/moreArrow.svg" />
+              </AllMoreContainer>
+              <AllServicePriceContainer>
+                <AllServicePrice>{service.price}р</AllServicePrice>
+              </AllServicePriceContainer>
+            </AllDownCard>
+          </AllServiceCard>
+        ))}
       </AllServices>
     </Wrapper>
   );

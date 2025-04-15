@@ -18,10 +18,11 @@ export const TextContent = styled.div`
 `;
 
 export const Description = styled.p`
-  font-size: 1.1rem;
+  font-size: 1.7rem;
   line-height: 1.6;
-  color: #333;
+  color: #000000;
   margin: 0;
+  text-align: left;
 `;
 
 export const ImageContainer = styled.div`

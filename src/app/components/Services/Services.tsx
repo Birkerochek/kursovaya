@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Title from "../Title/Title";
 import { Wrapper } from "../Wrapper/Wrapper";
-import styled from "styled-components";
+import { ServicesCont, ServiceItem, ServiceItemImage, ServiceItemText } from "./ServicesStyles";
 
 export interface ServicesDataProps {
   id: number;
@@ -11,33 +11,6 @@ export interface ServicesDataProps {
   description?: string;
   price?: number;
 }
-
-export const ServicesCont = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 66px;
-`;
-export const ServiceItem = styled.div`
-  border: 1px solid #000;
-  border-radius: 15px;
-  width: 447px;
-  height: 308px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-`;
-export const ServiceItemImage = styled.img`
-  height: 170px;
-  width: 170px;
-`;
-export const ServiceItemText = styled.p`
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 20px;
-  color: #000;
-`;
 
 const Services = () => {
   const [servicesData, setServicesData] = useState<ServicesDataProps[]>([]);
