@@ -8,12 +8,9 @@ const Links = () => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin" || session?.user?.role === "master";
   console.log("isAdmin", session?.user?.role);
-  const scrollToFeedbackForm = () => {
-    const aboutUs = document.getElementById("aboutUs");
+  const scrollToFooter = () => {
     const footer = document.getElementById("footer");
-    if (aboutUs) {
-      aboutUs.scrollIntoView({ behavior: "smooth" });
-    }
+   
     if (footer) {
       footer.scrollIntoView({ behavior: "smooth" });
     }
@@ -23,9 +20,9 @@ const Links = () => {
     <Wrapper>
       <LinksCont>
         <StyledLink href="/pages/catalog">Каталог услуг</StyledLink>
-        <NotLink onClick={()=> scrollToFeedbackForm()}>О компании</NotLink>
+        <NotLink>О компании</NotLink>
         <StyledLink href="/pages/reviews">Отзывы</StyledLink>
-        <NotLink onClick={()=> scrollToFeedbackForm()}>Контакты</NotLink>
+        <NotLink onClick={()=> scrollToFooter()}>Контакты</NotLink>
         {isAdmin && <StyledLink href="/admin">Панель управления</StyledLink>}
       </LinksCont>
     </Wrapper>

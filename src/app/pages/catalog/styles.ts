@@ -88,7 +88,7 @@ export const ServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #163e72;
+  background: #2573D8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +116,7 @@ export const MoreContainerText = styled.p`
 
 export const MoreContainerIcon = styled.img`
   margin-top: 2px;
-  width: clamp(12px, 2vw, 16px);
+  width: 45px;
 `;
 
 export const ServicePrice = styled.p`
@@ -194,7 +194,7 @@ export const AllServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #163e72;
+  background: #2573D8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -225,7 +225,9 @@ export const AllMoreContainerText = styled.p`
 
 export const AllMoreContainerIcon = styled.img`
   margin-top: 2px;
-  width: clamp(12px, 2vw, 16px);
+  width: 45px;
+  transition: all 0.3s ease;
+ 
 `;
 
 export const AllServicePrice = styled.p`
@@ -234,6 +236,13 @@ export const AllServicePrice = styled.p`
   font-size: clamp(10px, 1.8vw, 13px);
   color: #fff;
 `;
+
+export const Mark = styled.mark`
+background: #0B5C7E;
+border-radius: 5px;
+padding: 2px 5px;
+color: #fff;
+`
 
 export const AllServiceCard = styled.div`
   display: flex;

@@ -10,7 +10,7 @@ export const ServiceHeader = styled.div`
   display: flex;
   gap: 2rem;
   margin-bottom: 2rem;
-  align-items: flex-start;
+ 
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -30,12 +30,21 @@ export const ServiceImage = styled.img`
 `;
 
 export const ServiceInfo = styled.div`
-  flex: 1;
+  padding: 0 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  
 `;
-
+export const ServiceUse = styled.div`
+display: flex;
+gap: 20px;
+align-items: center;
+`
 export const ServiceTitle = styled.h1`
   font-size: 2.5rem;
-  color: #1b3764;
+  color: #0b5c7e;
   margin-bottom: 1rem;
 `;
 
@@ -43,31 +52,33 @@ export const ServiceDescription = styled.p`
   font-size: 1.1rem;
   line-height: 1.6;
   color: #333;
-  margin-bottom: 2rem;
+  
 `;
 
 export const PriceContainer = styled.div`
-  background: #163e72;
+  background: #0b5c7e;
   color: white;
   padding: 1rem 2rem;
   border-radius: 10px;
   display: inline-block;
 `;
+export const ServiceContent = styled.div`
+`
 
 export const Price = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
 `;
 
 export const OrderButton = styled.button`
-  background: #1b3764;
+  background: #2573d8;
   color: white;
   padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 2rem;
+  
   transition: background 0.3s ease;
 
   &:hover {

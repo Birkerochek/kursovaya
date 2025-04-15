@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export const ServicesCont = styled.div`
@@ -15,7 +16,8 @@ export const ServicesCont = styled.div`
   }
 `;
 
-export const ServiceItem = styled.div`
+export const ServiceItem = styled(Link)`
+  text-decoration: none;
   border: 1px solid #000;
   border-radius: 15px;
   width: 447px;

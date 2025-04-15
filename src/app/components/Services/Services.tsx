@@ -64,7 +64,7 @@ const Services = () => {
           <div>Услуги не найдены</div>
         ) : (
           servicesData.slice(0,6).map((item) => (
-            <ServiceItem key={item.id}>
+            <ServiceItem key={item.id} href={`/pages/catalog/${item.id}`}>
               <ServiceItemImage src={item.img} alt={item.title} />
               <ServiceItemText>{item.title}</ServiceItemText>
             </ServiceItem>

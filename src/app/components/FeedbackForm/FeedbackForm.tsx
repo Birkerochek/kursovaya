@@ -84,7 +84,7 @@ const FeedbackForm: React.FC = () => {
     <Wrapper>
       <Title>Обратная связь</Title>
         {!session ? (
-         <NoAuthorization>
+         <NoAuthorization id="feedback-form">
           <FeedbackTitle>RemTopia</FeedbackTitle>
           <NoAuthorizationText>Для отправки заявки необходимо <AuthButton/></NoAuthorizationText>
           

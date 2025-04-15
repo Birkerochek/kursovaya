@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "@/app/components/Modal/Modal";
 import ModalFeedbackForm from "@/app/components/ModalFeedbackForm/ModalFeedbackForm";
+import { Mark } from "./styles";
 
 export const SpecialItemContainer = styled.div`
   padding: clamp(1rem, 3vw, 1.5rem);
@@ -13,7 +14,7 @@ export const SpecialItemContainer = styled.div`
 
 export const Title = styled.h2`
   font-size: clamp(20px, 4vw, 32px);
-  color: #1b3764;
+  color: #2573D8;
   margin-bottom: 1rem;
 `;
 
@@ -21,10 +22,11 @@ export const Description = styled.p`
   font-size: clamp(14px, 2.5vw, 18px);
   color: #666;
   margin-bottom: 1.5rem;
+  line-height: 1.5;
 `;
 
 export const ActionButton = styled.button`
-  background: #1b3764;
+  background: #2573D8;
   color: white;
   padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
   border: none;
@@ -35,7 +37,7 @@ export const ActionButton = styled.button`
   align-self: flex-start;
 
   &:hover {
-    background: #152a4d;
+    background: #0B5C7E;
   }
 `;
 
@@ -44,9 +46,9 @@ export const FirstGridItem = () => {
     <SpecialItemContainer>
       <Title>Специальное предложение</Title>
       <Description>
-        Получите скидку 20% на первый заказ при оформлении заявки прямо сейчас
+        Позвоните по номеру и скажите кодовое слово <Mark>Курсовая</Mark>  и получите скидку 20% при оформлении заявки прямо сейчас!
       </Description>
-      <ActionButton>Получить скидку</ActionButton>
+      <ActionButton>+7 (900) 084-86-83</ActionButton>
     </SpecialItemContainer>
   );
 };

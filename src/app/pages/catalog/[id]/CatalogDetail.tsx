@@ -16,6 +16,8 @@ import {
   PriceContainer,
   Price,
   OrderButton,
+  ServiceUse,
+  ServiceContent,
 } from "./CatalogDetailStyles";
 
 interface ServiceData {
@@ -42,14 +44,21 @@ export default function CatalogDetail({ service }: CatalogDetailProps) {
             <ServiceImage src={service.img} alt={service.title} />
           </ImageContainer>
           <ServiceInfo>
+            <ServiceContent>
+
             <ServiceTitle>{service.title}</ServiceTitle>
             <ServiceDescription>{service.description}</ServiceDescription>
+            </ServiceContent>
+
+            <ServiceUse>
+
             <PriceContainer>
               <Price>{service.price}р</Price>
             </PriceContainer>
             <OrderButton onClick={() => setIsModalOpen(true)}>
               Заказать услугу
             </OrderButton>
+            </ServiceUse>
           </ServiceInfo>
         </ServiceHeader>
       </DetailContainer>
