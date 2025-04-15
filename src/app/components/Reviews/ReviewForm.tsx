@@ -1,120 +1,90 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Rating, Button, TextField } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Rating } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
 
-const FormContainer = styled.form`
-  background: white;
-  border-radius: 10px;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin: 0 auto 30px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
 `;
 
-const FormTitle = styled.h3`
-  color: #1b3764;
-  margin-bottom: 20px;
+const TextArea = styled.textarea`
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 100px;
+  font-family: inherit;
+  resize: vertical;
 `;
 
-const FieldContainer = styled.div`
-  margin-bottom: 20px;
+const RatingContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
 `;
 
-const ErrorText = styled.p`
-  color: #d32f2f;
-  font-size: 0.75rem;
-  margin-top: 3px;
+const RatingLabel = styled.label`
+  font-weight: 500;
 `;
 
-interface ReviewFormData {
-  name: string;
-  rating: number;
-  text: string;
-}
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 interface ReviewFormProps {
-  onSubmit: (data: ReviewFormData) => Promise<void>;
+  onSubmit: (data: { rating: number; text: string }) => void;
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, handleSubmit, control, reset, formState: { errors } } = useForm<ReviewFormData>({
-    defaultValues: {
-      rating: 5,
-    }
-  });
+  const [rating, setRating] = useState<number>(5);
+  const [text, setText] = useState<string>("");
 
-  const onSubmitHandler = async (data: ReviewFormData) => {
-    setIsSubmitting(true);
-    try {
-      await onSubmit(data);
-      reset();
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ rating, text });
+    setText("");
+    setRating(5);
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmitHandler)}>
-      <FormTitle>Оставить отзыв</FormTitle>
-      <FieldContainer>
-        <TextField
-          fullWidth
-          label="Ваше имя"
-          {...register('name', { required: 'Имя обязательно' })}
-          error={!!errors.name}
-          helperText={errors.name?.message}
+    <Form onSubmit={handleSubmit}>
+      <RatingContainer>
+        <RatingLabel>Оценка:</RatingLabel>
+        <Rating
+          value={rating}
+          onChange={(_, newValue) => {
+            setRating(newValue || 5);
+          }}
+          precision={1}
+          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
         />
-      </FieldContainer>
-
-      <FieldContainer>
-        <Controller
-          name="rating"
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Rating
-              {...field}
-              precision={0.5}
-              size="large"
-            />
-          )}
-        />
-        {errors.rating && <ErrorText>Оценка обязательна</ErrorText>}
-      </FieldContainer>
-
-      <FieldContainer>
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          label="Ваш отзыв"
-          {...register('text', { 
-            required: 'Текст отзыва обязателен',
-            minLength: {
-              value: 10,
-              message: 'Отзыв должен содержать минимум 10 символов'
-            }
-          })}
-          error={!!errors.text}
-          helperText={errors.text?.message}
-        />
-      </FieldContainer>
-
-      <Button 
-        type="submit" 
-        variant="contained" 
-        disabled={isSubmitting}
-        sx={{ 
-          backgroundColor: '#1b3764',
-          '&:hover': {
-            backgroundColor: '#152a4d'
-          }
-        }}
-      >
-        {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
-      </Button>
-    </FormContainer>
+      </RatingContainer>
+      
+      <TextArea
+        placeholder="Напишите ваш отзыв здесь..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        required
+      />
+      
+      <SubmitButton type="submit">Отправить отзыв</SubmitButton>
+    </Form>
   );
 };
 

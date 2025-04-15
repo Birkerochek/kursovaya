@@ -57,23 +57,24 @@ export const LogoCont = styled(Link)`
   align-items: center;
   text-decoration: none;
   cursor: pointer;
+  
 `;
 
 export const Logo = styled.img`
-  width: 80px;
+  width: 50px;
   height: auto;
   object-fit: contain;
 
   @media (max-width: 1024px) {
-    width: 70px;
+    width: 40px;
   }
 
   @media (max-width: 768px) {
-    width: 60px;
+    width: 30px;
   }
 
   @media (max-width: 480px) {
-    width: 50px;
+    width: 20px;
   }
 `;
 

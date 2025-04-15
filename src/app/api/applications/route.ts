@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
-import pool from '@/app/lib/db';
+import { supabase } from '@/app/components/supabaseClient';
 import { sendTelegramMessage } from '@/app/lib/telegram';
 
 export async function GET() {
   try {
-    const result = await pool.query(`
-      SELECT * FROM applications
-      ORDER BY created_at DESC
-    `);
+    const { data, error } = await supabase
+      .from('applications')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
     
-    return NextResponse.json(result.rows);
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Database Error:', error);
     return NextResponse.json(
@@ -26,7 +28,6 @@ export async function POST(request: Request) {
 
     const { name, phone, email, techType: service, description: message } = body;
 
-    // Проверяем обязательные поля
     if (!name || !phone || !service || !message) {
       console.error('Missing required fields:', { name, phone, service, message });
       return NextResponse.json(
@@ -35,7 +36,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Формируем сообщение для Telegram
     const telegramMessage = `
 🔔 <b>Новая заявка!</b>
 
@@ -50,7 +50,6 @@ export async function POST(request: Request) {
 #новая_заявка
     `.trim();
 
-    // Отправляем сообщение в Telegram
     try {
       await sendTelegramMessage(telegramMessage);
       console.log('Telegram notification sent successfully');
@@ -58,17 +57,25 @@ export async function POST(request: Request) {
       console.error('Failed to send Telegram notification:', telegramError);
     }
 
-    // Сохраняем в базу данных
-    console.log('Saving to database...');
-    const result = await pool.query(
-      `INSERT INTO applications (name, phone, email, service, message, status)
-       VALUES ($1, $2, $3, $4, $5, 'pending')
-       RETURNING *`,
-      [name, phone, email || null, service, message]
-    );
+    const { data, error } = await supabase
+      .from('applications')
+      .insert([
+        {
+          name,
+          phone,
+          email: email || null,
+          service,
+          message,
+          status: 'pending'
+        }
+      ])
+      .select()
+      .single();
 
-    console.log('Saved to database:', result.rows[0]);
-    return NextResponse.json(result.rows[0]);
+    if (error) throw error;
+
+    console.log('Saved to database:', data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(
@@ -76,4 +83,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

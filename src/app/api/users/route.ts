@@ -22,7 +22,7 @@ export async function PUT(request: Request) {
   try {
     const { userId, role } = await request.json();
     
-    if (!userId || !role || !['user', 'admin'].includes(role)) {
+    if (!userId || !role || !['user', 'admin', 'master'].includes(role)) {
       return NextResponse.json(
         { error: 'Invalid user ID or role' },
         { status: 400 }

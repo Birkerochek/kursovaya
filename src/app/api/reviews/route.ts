@@ -23,9 +23,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, rating, text } = body;
+    const { name, rating, text, user_id } = body;
 
-    if (!name || !rating || !text) {
+    if (!rating || !text || !user_id) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     const { data, error } = await supabase
       .from('reviews')
-      .insert([{ name, rating, text }])
+      .insert([{ name, rating, text, user_id }])
       .select()
       .single();
 

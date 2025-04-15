@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import {
   CardContent,
   Select,
@@ -8,10 +8,11 @@ import {
   Stack,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import { StyledCard, DeleteButton, StatusChip } from "./StyledComponents";
+import { StyledCard, DeleteButton, StatusText, StatusChip } from "./StyledComponents";
 import { Application, Master } from "../types";
 import { sendTelegramMessage } from "@/app/lib/telegram";
 import { supabase } from "@/app/components/supabaseClient";
+import { useSession } from "next-auth/react";
 
 interface ApplicationCardProps {
   application: Application;
@@ -41,7 +42,8 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   onAssignMaster,
   onDelete,
 }) => {
-  console.log(masters);
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
   const handleStatusChange = async (applicationId: number, newStatus: string) => {
     try {
       await onStatusChange(applicationId, newStatus);
@@ -107,11 +109,11 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <Typography variant="h6" gutterBottom>
               Заявка #{application.id}
             </Typography>
-            <StatusChip
-              label={getStatusLabel(application.status)}
-              status={application.status}
-              size="small"
-            />
+            <StatusChip status={application.status}>
+              <StatusText>{getStatusLabel(application.status)}</StatusText>
+            </StatusChip>
+              
+            
           </Box>
 
           <Box>
@@ -159,6 +161,9 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </Select>
           </Box>
 
+            {
+              isAdmin && (
+
           <Box>
             <Typography variant="subtitle2" color="textSecondary" gutterBottom>
               Мастер
@@ -172,6 +177,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               fullWidth
               displayEmpty
             >
+              
               <MenuItem value="">Выберите мастера</MenuItem>
               {masters.map((master) => (
                 <MenuItem key={master.id} value={master.id}>
@@ -180,6 +186,8 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               ))}
             </Select>
           </Box>
+              )
+            }
 
           <Typography variant="caption" color="textSecondary">
             Создано:{" "}

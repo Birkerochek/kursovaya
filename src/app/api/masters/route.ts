@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
-import pool from '@/app/lib/db';
+import { supabase } from '@/app/components/supabaseClient';
 
 export async function GET() {
   try {
-    const result = await pool.query(`
-      SELECT * FROM masters
-      WHERE is_active = true
-      ORDER BY name
-    `);
+    const { data, error } = await supabase
+      .from('masters')
+      .select('*')
+      .eq('is_active', true)
+      .order('name');
+
+    if (error) throw error;
     
-    return NextResponse.json(result.rows);
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Database Error:', error);
     return NextResponse.json(
@@ -17,4 +19,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}

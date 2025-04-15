@@ -9,15 +9,16 @@ import { ApplicationsList } from "./components/ApplicationsList";
 import MainBackButton from "@/app/UI/MainBackButton";
 import UserManagement from "./components/UserManagement";
 import styled from "styled-components";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 
 const AdminContainer = styled.div`
-display:grid;
-grid-template-columns: 2fr 1fr;
-gap: 20px;
+display:flex;
+
 `
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
+  const isAdmin = session?.user?.role === "admin";
   const router = useRouter();
 
   const {
@@ -31,14 +32,7 @@ export default function AdminPage() {
 
   const { masters, fetchMasters } = useMasters();
 
-  useEffect(() => {
-    if (status === "authenticated" && session?.user?.role !== "admin") {
-      router.push("/");
-    }
-    if (status === "unauthenticated") {
-      router.push("/");
-    }
-  }, [status, session, router]);
+
 
   useEffect(() => {
     fetchApplications();
@@ -49,12 +43,10 @@ export default function AdminPage() {
     return <div>Loading...</div>;
   }
 
-  if (session?.user?.role !== "admin") {
-    return null;
-  }
+  
 
   return (
-    <div>
+    <Wrapper>
       <MainBackButton />
       <AdminContainer>
         <div>
@@ -67,10 +59,12 @@ export default function AdminPage() {
             loading={loading}
           />
         </div>
+        {isAdmin &&
         <div>
           <UserManagement />
         </div>
+        }
       </AdminContainer>
-    </div>
+    </Wrapper>
   );
 }

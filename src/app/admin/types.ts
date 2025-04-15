@@ -14,10 +14,8 @@ export interface Application {
   name: string;
   email: string;
   phone: string;
-  message?: string;
   techType: string;
   description: string;
-  service: string;
   status: "pending" | "approved" | "rejected";
   master_id: number | null;
   assigned_at: string | null;
