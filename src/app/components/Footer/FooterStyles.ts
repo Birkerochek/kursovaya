@@ -62,25 +62,6 @@ export const FooterLink = styled(Link)`
   }
 `;
 
-export const SocialLinks = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
-`;
-
-export const SocialIcon = styled.a`
-  color: #fff;
-  font-size: 1.5rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #2573d8;
-  }
-`;
 
 export const FooterBottom = styled.div`
   text-align: center;

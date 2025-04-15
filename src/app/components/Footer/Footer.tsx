@@ -1,14 +1,11 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { FaInstagram, FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import { 
   FooterContainer, 
   FooterContent, 
   FooterSection, 
   FooterLink,
-  SocialLinks,
-  SocialIcon,
   FooterBottom 
 } from './FooterStyles';
 
@@ -21,17 +18,7 @@ const Footer = () => {
           <p>
             Починим ваши продукты за считанные дни и без особых затрат!.
           </p>
-          <SocialLinks>
-            <SocialIcon href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <FaInstagram />
-            </SocialIcon>
-            <SocialIcon href="https://t.me" target="_blank" rel="noopener noreferrer">
-              <FaTelegramPlane />
-            </SocialIcon>
-            <SocialIcon href="https://wa.me/89514569595" target="_blank" rel="noopener noreferrer">
-              <FaWhatsapp />
-            </SocialIcon>
-          </SocialLinks>
+         
         </FooterSection>
 
         <FooterSection>
