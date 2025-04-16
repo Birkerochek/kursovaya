@@ -25,7 +25,7 @@ export function useUsers() {
     }
   };
 
-  const updateUserRole = async (userId: string, newRole: 'user' | 'admin') => {
+  const updateUserRole = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
     try {
       const response = await fetch('/api/users', {
         method: 'PUT',

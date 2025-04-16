@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useUsers } from '../hooks/useUsers';
 import { 
-  
   Table, 
   TableBody, 
   TableCell, 
@@ -11,9 +10,17 @@ import {
   Select,
   MenuItem,
   CircularProgress,
-  Typography
+  Typography,
+  TextField
 } from '@mui/material';
 import styled from 'styled-components';
+
+interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  role?: 'user' | 'admin' | 'master';
+}
 
 const UserCont = styled.div`
   margin: 20px 0;
@@ -21,21 +28,20 @@ const UserCont = styled.div`
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
-  `
-
+`;
 
 const LoadingWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
-`
+`;
 
 export default function UserManagement() {
   const { users, loading, updateUserRole } = useUsers();
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleRoleChange = async (userId: string, newRole: 'user' & 'admin' & 'master') => {
+  const handleRoleChange = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
     try {
       setUpdatingUserId(userId);
       await updateUserRole(userId, newRole);
@@ -43,6 +49,17 @@ export default function UserManagement() {
       setUpdatingUserId(null);
     }
   };
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredUsers = searchQuery.trim()
+    ? users.filter((user) => 
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : users;
 
   if (loading) {
     return (
@@ -59,6 +76,16 @@ export default function UserManagement() {
       <Typography variant="h6" gutterBottom>
         Управление пользователями
       </Typography>
+
+      <TextField 
+        label="Поиск пользователей" 
+        variant="outlined" 
+        fullWidth 
+        margin="normal"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
       <TableContainer>
         <Table>
           <TableHead>
@@ -69,7 +96,7 @@ export default function UserManagement() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -79,7 +106,7 @@ export default function UserManagement() {
                   ) : (
                     <Select
                       value={user.role}
-                      onChange={(e) => handleRoleChange(user.id, e.target.value as 'user' & 'admin' & 'master')}
+                      onChange={(e) => handleRoleChange(user.id, e.target.value as 'user' | 'admin' | 'master')}
                       size="small"
                     >
                       <MenuItem value="user">Пользователь</MenuItem>
@@ -90,6 +117,14 @@ export default function UserManagement() {
                 </TableCell>
               </TableRow>
             ))}
+
+            {filteredUsers.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography align="center">Пользователи не найдены</Typography>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

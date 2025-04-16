@@ -10,9 +10,10 @@ import MainBackButton from "@/app/UI/MainBackButton";
 import UserManagement from "./components/UserManagement";
 import styled from "styled-components";
 import { Wrapper } from "../components/Wrapper/Wrapper";
+import { StyledLink } from "../components/Links/LinksStyles";
 
 const AdminContainer = styled.div`
-display:flex;
+
 
 `
 
@@ -53,6 +54,11 @@ export default function AdminPage() {
   return (
     <Wrapper>
       <AdminContainer>
+          {isAdmin &&
+          <div>
+            <StyledLink href={"/admin/users"}>Управление пользователями</StyledLink>
+          </div>
+          }
         <div>
           <ApplicationsList
             applications={applications}
@@ -63,11 +69,6 @@ export default function AdminPage() {
             loading={loading}
           />
         </div>
-        {isAdmin &&
-        <div>
-          <UserManagement />
-        </div>
-        }
       </AdminContainer>
     </Wrapper>
   );
