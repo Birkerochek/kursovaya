@@ -1,5 +1,6 @@
-import { applicationsApi, type Application } from "@/app/api/applications/route";
+// hooks/useApplications.ts
 import { useState } from "react";
+import { Application } from "../types";
 
 export const useApplications = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -7,8 +8,19 @@ export const useApplications = () => {
 
   const fetchApplications = async () => {
     try {
-      const data = await applicationsApi.getAllApplications();
-      setApplications(data as Application[]);
+      const response = await fetch("/api/applications", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при получении заявок");
+      }
+
+      const data: Application[] = await response.json();
+      setApplications(data);
     } catch (error) {
       console.error("Error fetching applications:", error);
     } finally {
@@ -17,11 +29,22 @@ export const useApplications = () => {
   };
 
   const handleStatusChange = async (
-    applicationId: number, 
-    newStatus: Application['status']
+    applicationId: number,
+    newStatus: Application["status"]
   ): Promise<void> => {
     try {
-      await applicationsApi.updateApplicationStatus(applicationId, newStatus);
+      const response = await fetch("/api/applications", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: applicationId, status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при обновлении статуса");
+      }
+
       setApplications((apps) =>
         apps.map((app) =>
           app.id === applicationId ? { ...app, status: newStatus } : app
@@ -33,11 +56,26 @@ export const useApplications = () => {
     }
   };
 
-  const handleAssignMaster = async (applicationId: number, masterId: number) => {
+  const handleAssignMaster = async (
+    applicationId: number,
+    masterId: number
+  ) => {
     try {
-      const updatedApplication = await applicationsApi.assignMaster(applicationId, masterId);
+      const response = await fetch("/api/applications", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: applicationId, masterId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при назначении мастера");
+      }
+
+      const updatedApplication = await response.json();
       const assignedAt = new Date().toISOString();
-      
+
       setApplications((apps) =>
         apps.map((app) =>
           app.id === applicationId
@@ -45,6 +83,7 @@ export const useApplications = () => {
             : app
         )
       );
+
       return updatedApplication;
     } catch (error) {
       console.error("Error assigning master:", error);
@@ -58,7 +97,17 @@ export const useApplications = () => {
     }
 
     try {
-      await applicationsApi.deleteApplication(id);
+      const response = await fetch(`/api/applications?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при удалении заявки");
+      }
+
       setApplications((apps) => apps.filter((app) => app.id !== id));
     } catch (error) {
       console.error("Error deleting application:", error);

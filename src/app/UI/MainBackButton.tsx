@@ -12,6 +12,7 @@ font-family: var(--font-family);
 font-weight: 400;
 font-size: 15px;
 color: #000;
+text-decoration: none;
 `
 
 export const BackButtonIcon = styled.img`

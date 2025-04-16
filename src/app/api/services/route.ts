@@ -1,43 +1,28 @@
-import { supabase } from "@/app/components/supabaseClient";
+import { servicesApi } from "@/app/lib/supabase/serviceApi";
+import { NextResponse } from "next/server";
 
-export interface Service {
-  id: number;
-  title: string;
-  img: string;
-  description?: string;
-  price?: number;
-}
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    const query = searchParams.get("query");
 
-export const servicesApi = {
-  searchServices: async (query: string) => {
-    const { data, error } = await supabase
-      .from("services")
-      .select("id, title")
-      .ilike("title", `%${query}%`)
-      .limit(5);
+    if (id) {
+      const data = await servicesApi.getServiceById(id);
+      return NextResponse.json(data);
+    }
 
-    if (error) throw error;
-    return data;
-  },
+    if (query) {
+      const data = await servicesApi.searchServices(query);
+      return NextResponse.json(data);
+    }
 
-  getAllServices: async () => {
-    const { data, error } = await supabase
-      .from('services')
-      .select('id, img, title, description, price')
-      .order('id');
-
-    if (error) throw error;
-    return data;
-  },
-
-  getServiceById: async (id: string) => {
-    const { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
-    return data;
+    const data = await servicesApi.getAllServices();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Failed to fetch services" },
+      { status: 500 }
+    );
   }
-};
+}

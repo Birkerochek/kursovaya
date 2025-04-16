@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { PatternFormat } from "react-number-format";
 import { sendTelegramMessage } from "@/app/lib/telegram";
-import { applicationsApi } from "@/app/api/applications/route";
 import { useSession } from "next-auth/react";
 import AuthButton from "../AuthButton/AuthButton";
 
@@ -123,9 +122,17 @@ const ModalFeedbackForm: React.FC = () => {
 const {data: session} = useSession()
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      console.log("Sending form data:", data);
-
-      const result = await applicationsApi.createApplication(data);
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Ошибка при создании заявки");
+      }
 
       const telegramMessage = `
       🔔 Новая заявка!

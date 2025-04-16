@@ -1,38 +1,49 @@
-import { supabase } from "@/app/components/supabaseClient";
+import { reviewsApi } from "@/app/lib/supabase/reviewsApi";
+import { NextResponse } from "next/server";
 
-export interface Review {
-  id: number;
-  name: string;
-  rating: number;
-  text: string;
-  user_id: string;
-  created_at: string;
+export async function GET() {
+  try {
+    const data = await reviewsApi.getAllReviews();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Failed to fetch reviews" },
+      { status: 500 }
+    );
+  }
 }
 
-export const reviewsApi = {
-  getAllReviews: async () => {
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('*')
-      .order('created_at', { ascending: false });
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const data = await reviewsApi.createReview(body);
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Failed to create review" },
+      { status: 500 }
+    );
+  }
+}
 
-    if (error) throw error;
-    return data as Review[];
-  },
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
 
-  createReview: async (review: Omit<Review, 'id' | 'created_at'>) => {
-    const { data, error } = await supabase
-      .from('reviews')
-      .insert([review])
-      .select()
-      .single();
+    if (!id) {
+      return NextResponse.json(
+        { error: "Review ID is required" },
+        { status: 400 }
+      );
+    }
 
-    if (error) throw error;
-    return data as Review;
-  },
-    deleteReview: async (id: number) => {
-      const { error } = await supabase.from("reviews").delete().eq("id", id);
-      if (error) throw error;
-      return true;
-    },
-};
+    await reviewsApi.deleteReview(Number(id));
+    return NextResponse.json({ message: "Review deleted" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Failed to delete review" },
+      { status: 500 }
+    );
+  }
+}

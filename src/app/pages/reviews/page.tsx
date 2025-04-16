@@ -11,7 +11,7 @@ import styled from "styled-components";
 import BackButton from "@/app/UI/BackButton";
 import { supabase } from "@/app/components/supabaseClient";
 import { useSession } from "next-auth/react";
-import { reviewsApi } from "@/app/api/reviews/route";
+import { Review } from "@/app/lib/supabase/reviewsApi";
 
 const ReviewsContainer = styled.div`
   max-width: 800px;
@@ -32,15 +32,21 @@ const ReviewsPage = () => {
   const { data: session } = useSession();
 
   const fetchReviews = async () => {
+    setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const response = await fetch("/api/reviews", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error("Ошибка при получении отзывов");
+      }
 
-      setReviews(data || []);
+      const data: Review[] = await response.json();
+      setReviews(data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     } finally {
@@ -48,34 +54,46 @@ const ReviewsPage = () => {
     }
   };
 
+
   useEffect(() => {
     fetchReviews();
   }, []);
 
   const handleSubmitReview = async (data: { rating: number; text: string }) => {
-    if (!session?.user) {
+    if (!session?.user?.id) {
       alert("Пожалуйста, войдите в систему, чтобы оставить отзыв");
       return;
     }
 
     try {
-      const { error } = await supabase.from("reviews").insert([
-        {
-          user_id: session.user.id,
-          name: session.user.name || "Анонимный пользователь",
-          rating: data.rating,
-          text: data.text,
-        },
-      ]);
+      const reviewData = {
+        user_id: session.user.id,
+        name: session.user.name || "Анонимный пользователь",
+        rating: data.rating,
+        text: data.text,
+      };
 
-      if (error) throw error;
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reviewData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Ошибка при создании отзыва");
+      }
 
       await fetchReviews();
       alert("Спасибо за ваш отзыв!");
     } catch (error) {
       console.error("Error submitting review:", error);
       alert(
-        "Произошла ошибка при отправке отзыва. Пожалуйста, попробуйте снова.",
+        `Произошла ошибка при отправке отзыва: ${
+          error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"
+        }`
       );
     }
   };
@@ -84,14 +102,29 @@ const ReviewsPage = () => {
       alert("У вас недостаточно прав для выполнения этого действия");
       return;
     }
-    try {
-      await reviewsApi.deleteReview(id);
-      alert("Отзыв успешно удалён");
 
-      fetchReviews();
-    } catch (error: any) {
+    try {
+      const response = await fetch(`/api/reviews?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Ошибка при удалении отзыва");
+      }
+
+      await fetchReviews();
+      alert("Отзыв успешно удалён");
+    } catch (error) {
       console.error("Error deleting review:", error);
-      alert("Произошла ошибка при удалении отзыва: " + error.message);
+      alert(
+        `Произошла ошибка при удалении отзыва: ${
+          error instanceof Error ? error.message : "Пожалуйста, попробуйте снова"
+        }`
+      );
     }
   };
 

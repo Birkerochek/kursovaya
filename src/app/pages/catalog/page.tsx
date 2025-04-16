@@ -32,7 +32,7 @@ import {
 } from "./styles";
 import BackButton from "@/app/UI/BackButton";
 import Link from "next/link";
-import { Service, servicesApi } from "@/app/api/services/route";
+import { Service } from "@/app/lib/supabase/serviceApi";
 
 const ServiceCard = ({
   service,
@@ -67,11 +67,24 @@ const ServicesPage = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const data = await servicesApi.getAllServices();
+        const response = await fetch("/api/services", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Ошибка при получении услуг");
+        }
+
+        const data: Service[] = await response.json();
         setServices(data);
       } catch (error) {
-        console.error('Error fetching services:', error);
-        setError(error instanceof Error ? error.message : 'Неизвестная ошибка');
+        console.error("Error fetching services:", error);
+        setError(
+          error instanceof Error ? error.message : "Неизвестная ошибка"
+        );
       } finally {
         setLoading(false);
       }

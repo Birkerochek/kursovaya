@@ -32,7 +32,7 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
         Управление заявками
       </Typography>
       <Grid>
-        {[...applications].reverse().map((application) => (
+        {applications.map((application) => (
           <ApplicationCard
             key={application.id}
             application={application}

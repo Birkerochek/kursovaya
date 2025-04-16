@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import styled from 'styled-components';
-import { applicationsApi } from '@/app/api/applications/route';
 
 const ApplicationsContainer = styled.div`
   margin: 2rem 0;
@@ -52,7 +51,19 @@ const NoApplications = styled.p`
   font-size: 1.1rem;
   margin: 2rem 0;
 `;
-
+interface Application {
+  id: number;
+  techType: string;
+  description: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  master_name?: string;
+  master_specialization?: string;
+  masters?: {
+    name: string;
+    specialization: string;
+  };
+}
 
 
 const UserApplications = () => {
@@ -65,7 +76,21 @@ const UserApplications = () => {
       if (!session?.user?.id) return;
 
       try {
-        const data = await applicationsApi.getUserApplications(session.user.id);
+        const response = await fetch(
+          `/api/applications?userId=${session.user.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Ошибка при получении заявок");
+        }
+
+        const data: Application[] = await response.json();
         const formattedData = data?.map(app => ({
           ...app,
           master_name: app.masters?.name,
@@ -104,6 +129,7 @@ const UserApplications = () => {
       }
       {applications.map(app => (
         <ApplicationCard key={app.id}>
+          <ApplicationTitle>Номер заявки #{app.id}</ApplicationTitle>
           <ApplicationTitle>
             {app.techType}
             <ApplicationStatus status={app.status}>

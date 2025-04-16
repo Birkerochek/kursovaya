@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Title from "../Title/Title";
 import { Wrapper } from "../Wrapper/Wrapper";
 import { ServicesCont, ServiceItem, ServiceItemImage, ServiceItemText } from "./ServicesStyles";
-import { servicesApi, type Service } from "@/app/api/services/route";
+import { Service } from "@/app/lib/supabase/serviceApi";
 
 const Services = () => {
   const [servicesData, setServicesData] = useState<Service[]>([]);
@@ -13,11 +13,24 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const data = await servicesApi.getAllServices();
+        const response = await fetch("/api/services", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Ошибка при получении услуг");
+        }
+
+        const data: Service[] = await response.json();
         setServicesData(data);
       } catch (error) {
-        console.error('Error fetching services:', error);
-        setError(error instanceof Error ? error.message : 'Неизвестная ошибка');
+        console.error("Error fetching services:", error);
+        setError(
+          error instanceof Error ? error.message : "Неизвестная ошибка"
+        );
       } finally {
         setLoading(false);
       }

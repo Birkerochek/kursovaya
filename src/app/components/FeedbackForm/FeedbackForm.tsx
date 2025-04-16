@@ -17,7 +17,6 @@ import {
 import { sendTelegramMessage } from "@/app/lib/telegram";
 import { PatternFormat } from "react-number-format";
 import AuthButton from "../AuthButton/AuthButton";
-import { applicationsApi } from "@/app/api/applications/route";
 
 interface FormData {
   name: string;
@@ -45,7 +44,18 @@ const FeedbackForm: React.FC = () => {
         user_id: session?.user?.id
       };
 
-      await applicationsApi.createApplication(formData);
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Ошибка при создании заявки");
+      }
 
       const telegramMessage = `
       🔔 Новая заявка!

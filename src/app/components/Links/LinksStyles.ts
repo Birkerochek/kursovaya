@@ -72,9 +72,8 @@ export const LinksCont = styled.div`
   }
 
   @media (max-width: 480px) {
-    flex-direction: column;
+    
     gap: 15px;
     margin: 15px 0;
-    align-items: flex-start;
   }
 `;

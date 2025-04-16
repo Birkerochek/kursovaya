@@ -19,7 +19,7 @@ import {
   MobileMenu,
 } from "./HeaderStyles";
 import Link from "next/link";
-import { servicesApi } from "@/app/api/services/route";
+import { Service } from "@/app/lib/supabase/serviceApi";
 
 interface ISearchResult {
   id: number;
@@ -40,12 +40,25 @@ const Header = () => {
         return;
       }
 
+
       setIsSearching(true);
       try {
-        const results = await servicesApi.searchServices(searchQuery);
-        setSearchResults(results || []);
+        const response = await fetch(`/api/services?query=${encodeURIComponent(searchQuery)}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Ошибка при поиске услуг");
+        }
+
+        const data: Pick<Service, "id" | "title">[] = await response.json();
+        setSearchResults(data);
       } catch (error) {
         console.error("Error searching services:", error);
+        setSearchResults([]);
       } finally {
         setIsSearching(false);
       }
