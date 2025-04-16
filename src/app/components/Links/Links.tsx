@@ -20,7 +20,6 @@ const Links = () => {
     <Wrapper>
       <LinksCont>
         <StyledLink href="/pages/catalog">Каталог услуг</StyledLink>
-        <NotLink>О компании</NotLink>
         <StyledLink href="/pages/reviews">Отзывы</StyledLink>
         <NotLink onClick={()=> scrollToFooter()}>Контакты</NotLink>
         {isAdmin && <StyledLink href="/admin">Панель управления</StyledLink>}

@@ -1,51 +1,38 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/app/components/supabaseClient';
+import { supabase } from "@/app/components/supabaseClient";
 
-export async function GET() {
-  try {
+export interface Review {
+  id: number;
+  name: string;
+  rating: number;
+  text: string;
+  user_id: string;
+  created_at: string;
+}
+
+export const reviewsApi = {
+  getAllReviews: async () => {
     const { data, error } = await supabase
       .from('reviews')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch reviews' },
-      { status: 500 }
-    );
-  }
-}
+    return data as Review[];
+  },
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { name, rating, text, user_id } = body;
-
-    if (!rating || !text || !user_id) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
-
+  createReview: async (review: Omit<Review, 'id' | 'created_at'>) => {
     const { data, error } = await supabase
       .from('reviews')
-      .insert([{ name, rating, text, user_id }])
+      .insert([review])
       .select()
       .single();
 
     if (error) throw error;
-
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error creating review:', error);
-    return NextResponse.json(
-      { error: 'Failed to create review' },
-      { status: 500 }
-    );
-  }
-}
+    return data as Review;
+  },
+    deleteReview: async (id: number) => {
+      const { error } = await supabase.from("reviews").delete().eq("id", id);
+      if (error) throw error;
+      return true;
+    },
+};

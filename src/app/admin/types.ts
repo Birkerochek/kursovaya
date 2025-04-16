@@ -12,7 +12,7 @@ export interface Master {
 export interface Application {
   id: number;
   name: string;
-  email: string;
+  email?: string;
   phone: string;
   techType: string;
   description: string;

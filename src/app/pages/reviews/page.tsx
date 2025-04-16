@@ -11,6 +11,7 @@ import styled from "styled-components";
 import BackButton from "@/app/UI/BackButton";
 import { supabase } from "@/app/components/supabaseClient";
 import { useSession } from "next-auth/react";
+import { reviewsApi } from "@/app/api/reviews/route";
 
 const ReviewsContainer = styled.div`
   max-width: 800px;
@@ -78,6 +79,21 @@ const ReviewsPage = () => {
       );
     }
   };
+  const handleDeleteReview = async (id: number) => {
+    if (!session || session.user.role !== "admin") {
+      alert("У вас недостаточно прав для выполнения этого действия");
+      return;
+    }
+    try {
+      await reviewsApi.deleteReview(id);
+      alert("Отзыв успешно удалён");
+
+      fetchReviews();
+    } catch (error: any) {
+      console.error("Error deleting review:", error);
+      alert("Произошла ошибка при удалении отзыва: " + error.message);
+    }
+  };
 
   return (
     <Wrapper>
@@ -97,7 +113,8 @@ const ReviewsPage = () => {
         ) : reviews.length === 0 ? (
           <NoReviews>Пока нет отзывов. Будьте первым!</NoReviews>
         ) : (
-          reviews.map((review) => <ReviewCard key={review.id} {...review} />)
+          reviews.map((review) => <ReviewCard key={review.id} {...review}   isAdmin={session?.user?.role === "admin"}
+          onDelete={handleDeleteReview}/>)
         )}
       </ReviewsContainer>
     </Wrapper>

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Wrapper } from "@/app/components/Wrapper/Wrapper";
-import { ServicesDataProps } from "@/app/components/Services/Services";
 import { FirstGridItem, LastGridItem } from "./SpecialGridItems";
 import {
   GridContainer,
@@ -33,12 +32,13 @@ import {
 } from "./styles";
 import BackButton from "@/app/UI/BackButton";
 import Link from "next/link";
+import { Service, servicesApi } from "@/app/api/services/route";
 
 const ServiceCard = ({
   service,
   area,
 }: {
-  service: ServicesDataProps;
+  service: Service;
   area?: string;
 }) => (
   <GridItem $area={area}>
@@ -60,23 +60,23 @@ const ServiceCard = ({
 );
 
 const ServicesPage = () => {
-  const [services, setServices] = useState<ServicesDataProps[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch("/api/services");
-        if (!response.ok) throw new Error("Ошибка загрузки данных");
-        const data = await response.json();
+        const data = await servicesApi.getAllServices();
         setServices(data);
-      } catch (err) {
-        setError("Не удалось загрузить услуги");
+      } catch (error) {
+        console.error('Error fetching services:', error);
+        setError(error instanceof Error ? error.message : 'Неизвестная ошибка');
       } finally {
         setLoading(false);
       }
     };
+
     fetchServices();
   }, []);
 

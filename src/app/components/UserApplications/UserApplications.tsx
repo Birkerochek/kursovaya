@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import styled from 'styled-components';
-import { supabase } from '../supabaseClient';
+import { applicationsApi } from '@/app/api/applications/route';
 
 const ApplicationsContainer = styled.div`
   margin: 2rem 0;
@@ -37,7 +37,7 @@ const ApplicationStatus = styled.span<{ status: string }>`
       default: return '#e0e0e0';
     }
   }};
-  color: ${props => props.status === 'pending' ? '#000' : '#fff'};
+  color: #fff;
 `;
 
 const ApplicationDetails = styled.div`
@@ -53,20 +53,11 @@ const NoApplications = styled.p`
   margin: 2rem 0;
 `;
 
-interface Application {
-  id: number;
-  techType: string;
-  description: string;
-  status: 'pending' | 'approved' | 'rejected';
-  created_at: string;
-  master_id: number | null;
-  master_name?: string;
-  master_specialization?: string;
-}
+
 
 const UserApplications = () => {
   const { data: session } = useSession();
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -74,21 +65,7 @@ const UserApplications = () => {
       if (!session?.user?.id) return;
 
       try {
-        const { data, error } = await supabase
-          .from('applications')
-          .select(`
-            *,
-            masters (
-              name,
-              specialization
-            )
-          `)
-          .eq('user_id', session.user.id)
-          .order('created_at', { ascending: false })
-          .limit(1);
-
-        if (error) throw error;
-        
+        const data = await applicationsApi.getUserApplications(session.user.id);
         const formattedData = data?.map(app => ({
           ...app,
           master_name: app.masters?.name,
@@ -108,7 +85,6 @@ const UserApplications = () => {
 
   if (loading) return null;
   if (!session?.user) return null;
-  if (applications.length === 0) return null;
 
   const getStatusText = (status: string) => {
     switch (status) {
@@ -121,6 +97,11 @@ const UserApplications = () => {
 
   return (
     <ApplicationsContainer>
+      {
+        applications.length === 0 && (
+          <NoApplications>Ваша заявка появится тут!</NoApplications>
+        )
+      }
       {applications.map(app => (
         <ApplicationCard key={app.id}>
           <ApplicationTitle>

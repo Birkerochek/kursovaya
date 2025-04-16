@@ -4,6 +4,7 @@ import { Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
 const Card = styled.div`
+position: relative;
   background: white;
   border-radius: 10px;
   padding: 20px;
@@ -34,16 +35,34 @@ const ReviewText = styled.p`
   color: #333;
   line-height: 1.5;
 `;
+const DeleteButton = styled.button`
+  position: absolute;
+  right: 20px;
+  top: 80px;
+  background-color: red;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
 
+  &:hover {
+    opacity: 0.9;
+  }
+`;
 export interface ReviewCardProps {
   id: number;
   name: string;
   rating: number;
   text: string;
   created_at: string;
+   
+    isAdmin?: boolean;
+    
+    onDelete?: (id: number) => void;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ name, rating, text, created_at }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ id, name, rating, text, created_at, isAdmin = false, onDelete, }) => {
   const date = new Date(created_at).toLocaleDateString('ru-RU', {
     year: 'numeric',
     month: 'long',
@@ -52,6 +71,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ name, rating, text, created_at 
 
   return (
     <Card>
+       {isAdmin && onDelete && (
+        <DeleteButton onClick={() => onDelete(id)}>Удалить</DeleteButton>
+      )}
       <ReviewHeader>
         <ReviewerName>{name}</ReviewerName>
         <Rating

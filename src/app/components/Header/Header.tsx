@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import AuthButton from "../AuthButton/AuthButton";
 import ModalFeedbackForm from "../ModalFeedbackForm/ModalFeedbackForm";
 import Modal from "../Modal/Modal";
-import { supabase } from "../supabaseClient";
 import {
   HeaderWrapper,
   HeaderCont,
@@ -20,6 +19,7 @@ import {
   MobileMenu,
 } from "./HeaderStyles";
 import Link from "next/link";
+import { servicesApi } from "@/app/api/services/route";
 
 interface ISearchResult {
   id: number;
@@ -42,14 +42,8 @@ const Header = () => {
 
       setIsSearching(true);
       try {
-        const { data, error } = await supabase
-          .from("services")
-          .select("id, title")
-          .ilike("title", `%${searchQuery}%`)
-          .limit(5);
-
-        if (error) throw error;
-        setSearchResults(data || []);
+        const results = await servicesApi.searchServices(searchQuery);
+        setSearchResults(results || []);
       } catch (error) {
         console.error("Error searching services:", error);
       } finally {

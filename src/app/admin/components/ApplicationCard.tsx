@@ -14,11 +14,12 @@ import { sendTelegramMessage } from "@/app/lib/telegram";
 import { supabase } from "@/app/components/supabaseClient";
 import { useSession } from "next-auth/react";
 
+
 interface ApplicationCardProps {
   application: Application;
   masters: Master[];
-  onStatusChange: (applicationId: number, newStatus: string) => void;
-  onAssignMaster: (applicationId: number, masterId: number) => void;
+  onStatusChange: (applicationId: number, newStatus: Application['status']) => Promise<void>;
+  onAssignMaster: (applicationId: number, masterId: number) => Promise<void>;
   onDelete: (id: number) => void;
 }
 
@@ -44,7 +45,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
 }) => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin";
-  const handleStatusChange = async (applicationId: number, newStatus: string) => {
+  const handleStatusChange = async (applicationId: number, newStatus: Application['status']) => {
     try {
       await onStatusChange(applicationId, newStatus);
       
@@ -151,7 +152,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </Typography>
             <Select
               value={application.status}
-              onChange={(e) => handleStatusChange(application.id, e.target.value)}
+              onChange={(e) => handleStatusChange(application.id, e.target.value as Application['status'])}
               size="small"
               fullWidth
             >

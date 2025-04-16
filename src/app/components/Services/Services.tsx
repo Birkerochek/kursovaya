@@ -3,42 +3,20 @@ import React, { useState, useEffect } from "react";
 import Title from "../Title/Title";
 import { Wrapper } from "../Wrapper/Wrapper";
 import { ServicesCont, ServiceItem, ServiceItemImage, ServiceItemText } from "./ServicesStyles";
-
-export interface ServicesDataProps {
-  id: number;
-  title: string;
-  img: string;
-  description?: string;
-  price?: number;
-}
+import { servicesApi, type Service } from "@/app/api/services/route";
 
 const Services = () => {
-  const [servicesData, setServicesData] = useState<ServicesDataProps[]>([]);
+  const [servicesData, setServicesData] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        console.log('Начинаем загрузку услуг...');
-        const response = await fetch('/api/services');
-        console.log('Статус ответа:', response.status);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('Полученные данные:', data);
-        
-        if (Array.isArray(data)) {
-          setServicesData(data);
-        } else {
-          console.error('Полученные данные не являются массивом:', data);
-          setError('Неверный формат данных');
-        }
+        const data = await servicesApi.getAllServices();
+        setServicesData(data);
       } catch (error) {
-        console.error('Ошибка загрузки услуг:', error);
+        console.error('Error fetching services:', error);
         setError(error instanceof Error ? error.message : 'Неизвестная ошибка');
       } finally {
         setLoading(false);

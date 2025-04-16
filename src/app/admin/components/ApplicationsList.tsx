@@ -8,8 +8,8 @@ import { Wrapper } from "@/app/components/Wrapper/Wrapper";
 interface ApplicationsListProps {
   applications: Application[];
   masters: Master[];
-  onStatusChange: (applicationId: number, newStatus: string) => void;
-  onAssignMaster: (applicationId: number, masterId: number) => void;
+  onStatusChange: (applicationId: number, newStatus: Application['status']) => Promise<void>;
+  onAssignMaster: (applicationId: number, masterId: number) => Promise<void>;
   onDelete: (id: number) => void;
   loading: boolean;
 }

@@ -3,9 +3,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { supabase } from "../supabaseClient";
 import { PatternFormat } from "react-number-format";
 import { sendTelegramMessage } from "@/app/lib/telegram";
+import { applicationsApi } from "@/app/api/applications/route";
+import { useSession } from "next-auth/react";
+import AuthButton from "../AuthButton/AuthButton";
 
 const FormContainer = styled.div`
   border-radius: 20px;
@@ -14,7 +16,19 @@ const FormContainer = styled.div`
   width: 100%;
   max-width: 500px;
 `;
-
+const NoForm = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  flex-direction:column;
+`
+const NoAuthorizationText = styled.p`
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 20px;
+  color: #e5e5e5;
+`
 const FormTitle = styled.h3`
   font-family: var(--font-family);
   font-weight: 400;
@@ -106,16 +120,13 @@ const ModalFeedbackForm: React.FC = () => {
     reset,
     control
   } = useForm<FormData>();
-
+const {data: session} = useSession()
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       console.log("Sending form data:", data);
 
-      const { error } = await supabase.from("applications").insert([data]);
+      const result = await applicationsApi.createApplication(data);
 
-      if (error) {
-        throw new Error(error.message);
-      }
       const telegramMessage = `
       🔔 Новая заявка!
       
@@ -126,7 +137,7 @@ const ModalFeedbackForm: React.FC = () => {
       📝 Описание: ${data.description}
           `.trim();
       
-          await sendTelegramMessage(telegramMessage);
+      await sendTelegramMessage(telegramMessage);
       reset();
       alert("Заявка успешно отправлена!");
     } catch (error) {
@@ -142,6 +153,15 @@ const ModalFeedbackForm: React.FC = () => {
   return (
     <FormContainer>
       <FormTitle>Оставить заявку</FormTitle>
+      {!session ?(
+        <NoForm>
+          <NoAuthorizationText>Войдите в систему, чтобы оставить заявку</NoAuthorizationText>
+          <AuthButton/>
+
+        </NoForm>
+      )
+    :
+    (
       <Form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Input
           placeholder="Имя"
@@ -150,27 +170,27 @@ const ModalFeedbackForm: React.FC = () => {
         {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
 
         <Controller
-  name="phone"
-  control={control} 
-  rules={{
-    required: "Поле 'Номер телефона' обязательно",
-    pattern: {
-      value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
-      message: "Неверный формат номера телефона",
-    }
-  }}
-  render={({ field }) => (
-    <Input
-      as={PatternFormat}
-      format="+7 (###) ###-##-##"
-      placeholder="Номер телефона"
-      value={field.value}
-      onValueChange={(values) => {
-        field.onChange(values.formattedValue);
-      }}
-    />
-  )}
-/>
+          name="phone"
+          control={control} 
+          rules={{
+            required: "Поле 'Номер телефона' обязательно",
+            pattern: {
+              value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+              message: "Неверный формат номера телефона",
+            }
+          }}
+          render={({ field }) => (
+            <Input
+              as={PatternFormat}
+              format="+7 (###) ###-##-##"
+              placeholder="Номер телефона"
+              value={field.value}
+              onValueChange={(values) => {
+                field.onChange(values.formattedValue);
+              }}
+            />
+          )}
+        />
         {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
 
         <Input
@@ -206,6 +226,8 @@ const ModalFeedbackForm: React.FC = () => {
 
         <SubmitButton type="submit">Отправить</SubmitButton>
       </Form>
+
+    )}
     </FormContainer>
   );
 };

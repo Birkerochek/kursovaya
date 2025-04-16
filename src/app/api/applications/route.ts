@@ -1,86 +1,92 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/app/components/supabaseClient';
-import { sendTelegramMessage } from '@/app/lib/telegram';
+import { supabase } from "@/app/components/supabaseClient";
 
-export async function GET() {
-  try {
+export interface Application {
+  id: number;
+  name: string;
+  phone: string;
+  email?: string;
+  techType: string;
+  description: string;
+  status: 'pending' | 'approved' | 'rejected';
+  master_id: number | null;
+  assigned_at: string | null;
+  created_at: string;
+  user_id?: string;
+}
+
+export const applicationsApi = {
+  getAllApplications: async () => {
     const { data, error } = await supabase
       .from('applications')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Database Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch applications' },
-      { status: 500 }
-    );
-  }
-}
+    return data;
+  },
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    console.log('API received data:', body);
-
-    const { name, phone, email, techType: service, description: message } = body;
-
-    if (!name || !phone || !service || !message) {
-      console.error('Missing required fields:', { name, phone, service, message });
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
-
-    const telegramMessage = `
-🔔 <b>Новая заявка!</b>
-
-👤 Клиент: ${name}
-📱 Телефон: ${phone}
-✉️ Email: ${email || 'Не указан'}
-🔧 Услуга: ${service}
-📝 Сообщение: ${message}
-
-👨‍🔧 Статус мастера: Не назначен
-
-#новая_заявка
-    `.trim();
-
-    try {
-      await sendTelegramMessage(telegramMessage);
-      console.log('Telegram notification sent successfully');
-    } catch (telegramError) {
-      console.error('Failed to send Telegram notification:', telegramError);
-    }
-
+  getUserApplications: async (userId: string) => {
     const { data, error } = await supabase
       .from('applications')
-      .insert([
-        {
+      .select(`
+        *,
+        masters (
           name,
-          phone,
-          email: email || null,
-          service,
-          message,
-          status: 'pending'
-        }
-      ])
+          specialization
+        )
+      `)
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data;
+  },
+
+  createApplication: async (application: Omit<Application, 'id' | 'status' | 'master_id' | 'assigned_at' | 'created_at'>) => {
+    const { data, error } = await supabase
+      .from('applications')
+      .insert([{
+        ...application,
+        status: 'pending'
+      }])
       .select()
       .single();
 
     if (error) throw error;
+    return data;
+  },
 
-    console.log('Saved to database:', data);
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to process application' },
-      { status: 500 }
-    );
+  updateApplicationStatus: async (applicationId: number, status: Application['status']) => {
+    const { data, error } = await supabase
+      .from('applications')
+      .update({ status })
+      .eq('id', applicationId)
+      .select();
+
+    if (error) throw error;
+    return data;
+  },
+
+  assignMaster: async (applicationId: number, masterId: number) => {
+    const { data, error } = await supabase
+      .from('applications')
+      .update({ 
+        master_id: masterId, 
+        assigned_at: new Date().toISOString() 
+      })
+      .eq('id', applicationId)
+      .select();
+
+    if (error) throw error;
+    return data;
+  },
+
+  deleteApplication: async (id: number) => {
+    const { error } = await supabase
+      .from('applications')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
   }
-}
+};

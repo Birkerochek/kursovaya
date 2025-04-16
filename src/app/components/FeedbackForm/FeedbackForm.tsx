@@ -14,12 +14,10 @@ import {
   NoAuthorization,
   NoAuthorizationText,
 } from "./FeedbackFormStyles";
-import { supabase } from "../supabaseClient";
 import { sendTelegramMessage } from "@/app/lib/telegram";
 import { PatternFormat } from "react-number-format";
-import Modal from "../Modal/Modal";
-import ModalFeedbackForm from "../ModalFeedbackForm/ModalFeedbackForm";
 import AuthButton from "../AuthButton/AuthButton";
+import { applicationsApi } from "@/app/api/applications/route";
 
 interface FormData {
   name: string;
@@ -31,32 +29,24 @@ interface FormData {
 }
 
 const FeedbackForm: React.FC = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const { data: session } = useSession();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    setError,
     control
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      console.log("Sending form data:", data);
-
       const formData = {
         ...data,
-        user_id: session?.user?.id || null
+        user_id: session?.user?.id
       };
 
-      const { error } = await supabase.from("applications").insert([formData]);
+      await applicationsApi.createApplication(formData);
 
-      if (error) {
-        throw new Error(error.message);
-      }
       const telegramMessage = `
       🔔 Новая заявка!
       
@@ -67,7 +57,7 @@ const FeedbackForm: React.FC = () => {
       📝 Описание: ${data.description}
           `.trim();
       
-          await sendTelegramMessage(telegramMessage);
+      await sendTelegramMessage(telegramMessage);
       reset();
       alert("Заявка успешно отправлена!");
     } catch (error) {

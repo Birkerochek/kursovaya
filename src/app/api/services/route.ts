@@ -1,33 +1,43 @@
-// app/api/services/route.ts
-import { NextResponse } from 'next/server';
-import { supabase } from '@/app/components/supabaseClient';
+import { supabase } from "@/app/components/supabaseClient";
 
-export async function GET() {
-  try {
+export interface Service {
+  id: number;
+  title: string;
+  img: string;
+  description?: string;
+  price?: number;
+}
+
+export const servicesApi = {
+  searchServices: async (query: string) => {
+    const { data, error } = await supabase
+      .from("services")
+      .select("id, title")
+      .ilike("title", `%${query}%`)
+      .limit(5);
+
+    if (error) throw error;
+    return data;
+  },
+
+  getAllServices: async () => {
     const { data, error } = await supabase
       .from('services')
       .select('id, img, title, description, price')
       .order('id');
 
-    if (error) {
-      console.error('Ошибка Supabase:', error);
-      return NextResponse.json(
-        { error: 'Ошибка при получении данных' },
-        { status: 500 }
-      );
-    }
+    if (error) throw error;
+    return data;
+  },
 
-    return NextResponse.json(data, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    });
-  } catch (error) {
-    console.error('Ошибка сервера:', error);
-    return NextResponse.json(
-      { error: 'Внутренняя ошибка сервера' },
-      { status: 500 }
-    );
+  getServiceById: async (id: string) => {
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
   }
-}
+};

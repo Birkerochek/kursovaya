@@ -1,22 +1,34 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/app/components/supabaseClient';
+import { supabase } from "@/app/components/supabaseClient";
 
-export async function GET() {
-  try {
+export interface Master {
+  id: number;
+  name: string;
+  specialization: string;
+  phone: string;
+  email: string;
+  is_active: boolean;
+}
+
+export const mastersApi = {
+  getAllMasters: async () => {
     const { data, error } = await supabase
       .from('masters')
       .select('*')
-      .eq('is_active', true)
+      
       .order('name');
 
     if (error) throw error;
-    
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Database Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch masters' },
-      { status: 500 }
-    );
+    return data as Master[];
+  },
+  
+  getMasterById: async (id: number) => {
+    const { data, error } = await supabase
+      .from('masters')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data as Master;
   }
-}
+};

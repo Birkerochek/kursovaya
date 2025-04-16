@@ -1,6 +1,5 @@
+import { applicationsApi, type Application } from "@/app/api/applications/route";
 import { useState } from "react";
-import { supabase } from "@/app/components/supabaseClient";
-import { Application } from "../types";
 
 export const useApplications = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -8,11 +7,7 @@ export const useApplications = () => {
 
   const fetchApplications = async () => {
     try {
-      const { data, error } = await supabase
-        .from("applications")
-        .select("*");
-
-      if (error) throw error;
+      const data = await applicationsApi.getAllApplications();
       setApplications(data as Application[]);
     } catch (error) {
       console.error("Error fetching applications:", error);
@@ -22,55 +17,38 @@ export const useApplications = () => {
   };
 
   const handleStatusChange = async (
-    applicationId: number,
-    newStatus: string,
-  ) => {
+    applicationId: number, 
+    newStatus: Application['status']
+  ): Promise<void> => {
     try {
-      const { data, error } = await supabase
-        .from("applications")
-        .update({ status: newStatus })
-        .eq("id", applicationId)
-        .select();
-
-      if (error) throw error;
-
-      // Обновляем локальное состояние
+      await applicationsApi.updateApplicationStatus(applicationId, newStatus);
       setApplications((apps) =>
         apps.map((app) =>
-          app.id === applicationId
-            ? { ...app, status: newStatus as Application["status"] }
-            : app,
-        ),
+          app.id === applicationId ? { ...app, status: newStatus } : app
+        )
       );
     } catch (error) {
       console.error("Error updating status:", error);
+      throw error;
     }
   };
 
-  const handleAssignMaster = async (
-    applicationId: number,
-    masterId: number,
-  ) => {
+  const handleAssignMaster = async (applicationId: number, masterId: number) => {
     try {
+      const updatedApplication = await applicationsApi.assignMaster(applicationId, masterId);
       const assignedAt = new Date().toISOString();
-
-      const { data, error } = await supabase
-        .from("applications")
-        .update({ master_id: masterId, assigned_at: assignedAt })
-        .eq("id", applicationId)
-        .select();
-
-      if (error) throw error;
-
+      
       setApplications((apps) =>
         apps.map((app) =>
           app.id === applicationId
             ? { ...app, master_id: masterId, assigned_at: assignedAt }
-            : app,
-        ),
+            : app
+        )
       );
+      return updatedApplication;
     } catch (error) {
       console.error("Error assigning master:", error);
+      throw error;
     }
   };
 
@@ -80,13 +58,7 @@ export const useApplications = () => {
     }
 
     try {
-      const { data, error } = await supabase
-        .from("applications")
-        .delete()
-        .eq("id", id);
-
-      if (error) throw error;
-
+      await applicationsApi.deleteApplication(id);
       setApplications((apps) => apps.filter((app) => app.id !== id));
     } catch (error) {
       console.error("Error deleting application:", error);

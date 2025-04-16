@@ -31,8 +31,13 @@ export default function AdminPage() {
   } = useApplications();
 
   const { masters, fetchMasters } = useMasters();
-
-
+  const onStatusChangeHandler = async (applicationId: number, newStatus: "pending" | "approved" | "rejected"): Promise<any> => {
+    const result = await handleStatusChange(applicationId, newStatus);
+    return result; // Преобразуем Promise<any[]> в Promise<any>
+  };
+  const wrappedHandleAssign = async (id: number, masterId: number) => {
+    await handleAssignMaster(id, masterId);
+  };
 
   useEffect(() => {
     fetchApplications();
@@ -53,8 +58,8 @@ export default function AdminPage() {
           <ApplicationsList
             applications={applications}
             masters={masters}
-            onStatusChange={handleStatusChange}
-            onAssignMaster={handleAssignMaster}
+            onStatusChange={onStatusChangeHandler}
+            onAssignMaster={wrappedHandleAssign}
             onDelete={handleDeleteApplication}
             loading={loading}
           />
