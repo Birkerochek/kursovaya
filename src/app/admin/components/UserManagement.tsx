@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent, use } from 'react';
 import { useUsers } from '../hooks/useUsers';
 import { 
   Table, 
@@ -14,12 +14,23 @@ import {
   TextField
 } from '@mui/material';
 import styled from 'styled-components';
+import { useMasters } from '../hooks/useMasters';
+import { Master } from '../types';
 
 interface IUser {
   id: string;
   email: string;
   name: string;
   role?: 'user' | 'admin' | 'master';
+  phone?: string;
+}
+ 
+interface IMasters {
+  id: string;
+  email: string;
+  name: string;
+  specialization: string;
+  phone: string;
 }
 
 const UserCont = styled.div`
@@ -40,6 +51,19 @@ export default function UserManagement() {
   const { users, loading, updateUserRole } = useUsers();
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const {masters, fetchMasters, handlePhoneChange} = useMasters();
+  const [masterPhone, setMasterPhone] = useState('+7 (000) 00-00-00')
+
+  const phoneChange = async (masterId: string, phone: string) =>{
+    try{
+      setMasterPhone(masterId);
+      await handlePhoneChange(masterId, phone)
+
+    } finally{
+      setMasterPhone('222')
+    }
+    
+  }
 
   const handleRoleChange = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
     try {
@@ -49,6 +73,7 @@ export default function UserManagement() {
       setUpdatingUserId(null);
     }
   };
+
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -93,6 +118,7 @@ export default function UserManagement() {
               <TableCell>Email</TableCell>
               <TableCell>Имя</TableCell>
               <TableCell>Роль</TableCell>
+              <TableCell>Телефон</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -100,6 +126,7 @@ export default function UserManagement() {
               <TableRow key={user.id}>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.name}</TableCell>
+               
                 <TableCell>
                   {updatingUserId === user.id ? (
                     <CircularProgress size={20} />
@@ -115,6 +142,19 @@ export default function UserManagement() {
                     </Select>
                   )}
                 </TableCell>
+                {user.role === 'master' && (
+                  <TableCell>
+                    
+                    <TextField
+                    size='small'
+                    label = 'Номер телефона'
+                    
+                    value={masterPhone}
+                    onChange={(e)=> phoneChange(user.id, e.target.value)}
+                    />
+                  </TableCell>
+                  )            
+                  }
               </TableRow>
             ))}
 

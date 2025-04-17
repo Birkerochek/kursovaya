@@ -1,4 +1,3 @@
-// Типы и интерфейсы для административной панели
 
 export interface Master {
   id: number;

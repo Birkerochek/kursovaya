@@ -29,6 +29,7 @@ export const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  
 
   h3 {
     font-family: var(--font-family);
