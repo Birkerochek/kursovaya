@@ -11,7 +11,9 @@ import {
   MenuItem,
   CircularProgress,
   Typography,
-  TextField
+  TextField,
+  Box,
+  Button
 } from '@mui/material';
 import styled from 'styled-components';
 import { useMasters } from '../hooks/useMasters';
@@ -51,19 +53,32 @@ export default function UserManagement() {
   const { users, loading, updateUserRole } = useUsers();
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const {masters, fetchMasters, handlePhoneChange} = useMasters();
-  const [masterPhone, setMasterPhone] = useState('+7 (000) 00-00-00')
+  const { masters, loading: mastersLoading, createMaster } = useMasters();
 
-  const phoneChange = async (masterId: string, phone: string) =>{
-    try{
-      setMasterPhone(masterId);
-      await handlePhoneChange(masterId, phone)
+  const [newMaster, setNewMaster] = useState({
+    name: '',
+    email: '',
+    specialization: '',
+    phone: '',
+  });
+  const [creating, setCreating] = useState(false);
 
-    } finally{
-      setMasterPhone('222')
+  const handleNewMasterChange = (field: keyof typeof newMaster) => 
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setNewMaster(prev => ({ ...prev, [field]: e.target.value }));
+    };
+
+  const handleAddMaster = async () => {
+    try {
+      setCreating(true);
+      await createMaster(newMaster);
+      setNewMaster({ name: '', email: '', specialization: '', phone: '' });
+    } catch {
+   
+    } finally {
+      setCreating(false);
     }
-    
-  }
+  };
 
   const handleRoleChange = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
     try {
@@ -98,6 +113,42 @@ export default function UserManagement() {
 
   return (
     <UserCont>
+        <Typography variant="h6" gutterBottom>
+        Добавить нового мастера
+      </Typography>
+      <Box display="flex" gap={2} flexWrap="wrap" mb={4}>
+        <TextField
+          label="Имя"
+          value={newMaster.name}
+          onChange={handleNewMasterChange('name')}
+          size="small"
+        />
+        <TextField
+          label="Email"
+          value={newMaster.email}
+          onChange={handleNewMasterChange('email')}
+          size="small"
+        />
+        <TextField
+          label="Специализация"
+          value={newMaster.specialization}
+          onChange={handleNewMasterChange('specialization')}
+          size="small"
+        />
+        <TextField
+          label="Телефон"
+          value={newMaster.phone}
+          onChange={handleNewMasterChange('phone')}
+          size="small"
+        />
+        <Button
+          variant="contained"
+          onClick={handleAddMaster}
+          disabled={creating}
+        >
+          {creating ? 'Добавление…' : 'Добавить мастера'}
+        </Button>
+      </Box>
       <Typography variant="h6" gutterBottom>
         Управление пользователями
       </Typography>
@@ -149,8 +200,6 @@ export default function UserManagement() {
                     size='small'
                     label = 'Номер телефона'
                     
-                    value={masterPhone}
-                    onChange={(e)=> phoneChange(user.id, e.target.value)}
                     />
                   </TableCell>
                   )            

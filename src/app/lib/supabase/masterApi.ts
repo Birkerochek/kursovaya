@@ -8,6 +8,12 @@ export interface Master {
   email: string;
   is_active: boolean;
 }
+export interface NewMaster {
+  name: string;
+  email: string;
+  specialization: string;
+  phone: string;
+}
 
 export const mastersApi = {
   getAllMasters: async () => {
@@ -40,5 +46,14 @@ export const mastersApi = {
     
       if(error) throw error;
     return data;
-  }
+  },
+  createMaster: async (master: NewMaster) => {
+    const { data, error } = await supabase
+      .from('masters')
+      .insert(master)
+      .single();
+
+    if (error) throw error;
+    return data as Master;
+  },
 };

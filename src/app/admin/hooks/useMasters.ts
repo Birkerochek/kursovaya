@@ -1,5 +1,6 @@
 import { use, useEffect, useState } from "react";
 import { Master } from "../types";
+import { NewMaster } from "@/app/lib/supabase/masterApi";
 
 export const useMasters = () => {
   const [masters, setMasters] = useState<Master[]>([]);
@@ -51,6 +52,24 @@ export const useMasters = () => {
     }
 
   }
+  const createMaster = async (master: NewMaster) => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/masters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(master),
+      });
+      if (!response.ok) throw new Error('Ошибка при создании мастера');
+      const newMaster: Master = await response.json();
+      setMasters(prev => [newMaster, ...prev]);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     fetchMasters();
   }, []);
@@ -59,6 +78,7 @@ export const useMasters = () => {
     masters,
     loading,
     fetchMasters,
-    handlePhoneChange
+    handlePhoneChange,
+    createMaster
   };
 };

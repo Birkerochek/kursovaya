@@ -42,3 +42,19 @@ export async function PUT(request: Request) {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const { name, email, specialization, phone } = await request.json();
+    if (!name || !email || !specialization || !phone) {
+      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    }
+    const data = await mastersApi.createMaster({ name, email, specialization, phone });
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to create master' },
+      { status: 500 }
+    );
+  }
+}
