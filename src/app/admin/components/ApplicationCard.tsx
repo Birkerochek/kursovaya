@@ -11,7 +11,6 @@ import { Delete as DeleteIcon } from "@mui/icons-material";
 import { StyledCard, DeleteButton, StatusText, StatusChip } from "./StyledComponents";
 import { Application, Master } from "../types";
 import { sendTelegramMessage } from "@/app/lib/telegram";
-import { supabase } from "@/app/components/supabaseClient";
 import { useSession } from "next-auth/react";
 
 

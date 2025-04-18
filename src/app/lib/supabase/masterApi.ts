@@ -38,15 +38,6 @@ export const mastersApi = {
     return data as Master;
   },
 
-  updateMasterPhone: async ( id: number, phone: string) => {
-    const { data, error } = await supabase
-      .from('masters')
-      .update({ phone })
-      .eq('id', id);
-    
-      if(error) throw error;
-    return data;
-  },
   createMaster: async (master: NewMaster) => {
     const { data, error } = await supabase
       .from('masters')

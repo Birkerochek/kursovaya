@@ -6,7 +6,6 @@ import AuthButton from "../AuthButton/AuthButton";
 import ModalFeedbackForm from "../ModalFeedbackForm/ModalFeedbackForm";
 import Modal from "../Modal/Modal";
 
-// Основной контейнер для мобильной шапки
 const MobileHeaderWrapper = styled.header`
   position: fixed;
   top: 0;
@@ -22,13 +21,11 @@ const MobileHeaderWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   
-  /* Шапка для мобильных устройств */
   @media (min-width: 769px) {
     display: none;
   }
 `;
 
-// Контейнер для внутренних элементов шапки
 const MobileHeaderCont = styled.div`
   display: flex;
   align-items: center;
@@ -36,7 +33,6 @@ const MobileHeaderCont = styled.div`
   justify-content: space-between;
 `;
 
-// Стили для логотипа
 const LogoCont = styled(Link)`
   display: flex;
   align-items: center;
@@ -50,7 +46,6 @@ const Logo = styled.img`
   object-fit: contain;
 `;
 
-// Кнопка-бургер
 const MenuButton = styled.button`
   background: none;
   border: none;
@@ -59,7 +54,6 @@ const MenuButton = styled.button`
   cursor: pointer;
 `;
 
-// Контейнер выпадающего меню
 const MobileMenu = styled.div`
   position: absolute;
   top: 110%;
@@ -74,14 +68,12 @@ const MobileMenu = styled.div`
   z-index: 1001;
 `;
 
-// Стили для текста контакта
 const MenuText = styled.p`
   color: #fff;
   margin: 0;
   font-size: 14px;
 `;
 
-// Стили для кнопки заявки
 const MenuButtonFeedback = styled.button`
   border: none;
   border-radius: 8px;

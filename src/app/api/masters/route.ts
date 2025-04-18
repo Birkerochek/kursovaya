@@ -21,27 +21,6 @@ export async function GET(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
-  try {
-    const body = await request.json();
-    const { id, phone } = body;
-
-    if (id && phone) {
-      const data = await mastersApi.updateMasterPhone(Number(id), phone);
-      return NextResponse.json(data);
-    }
-
-    return NextResponse.json(
-      { error: "Invalid request" },
-      { status: 400 }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to update master" },
-      { status: 500 }
-    );
-  }
-}
 
 export async function POST(request: Request) {
   try {

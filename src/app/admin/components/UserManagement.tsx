@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, use } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useUsers } from '../hooks/useUsers';
 import { 
   Table, 
@@ -12,35 +12,16 @@ import {
   CircularProgress,
   Typography,
   TextField,
-  Box,
-  Button
 } from '@mui/material';
 import styled from 'styled-components';
 import { useMasters } from '../hooks/useMasters';
-import { Master } from '../types';
-
-interface IUser {
-  id: string;
-  email: string;
-  name: string;
-  role?: 'user' | 'admin' | 'master';
-  phone?: string;
-}
- 
-interface IMasters {
-  id: string;
-  email: string;
-  name: string;
-  specialization: string;
-  phone: string;
-}
 
 const UserCont = styled.div`
   margin: 20px 0;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 8px rgba(0,0,0,0.3);
 `;
 
 const LoadingWrapper = styled.div`
@@ -49,11 +30,36 @@ const LoadingWrapper = styled.div`
   padding: 20px;
 `;
 
+const CreateMasterCont = styled.div`
+  display: flex;
+  gap: 32px;
+  flex-wrap:wrap;
+  margin-bottom: 50px;
+
+`
+
+const SubmitButton = styled.div`
+background: #2573D8;
+color: #fff;
+height: 40px;
+width:150px;
+font-size: 14px;
+border-radius: 5px;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+transition: .3s;
+
+&:hover{
+  background: #0B5C7E;
+}
+`
 export default function UserManagement() {
   const { users, loading, updateUserRole } = useUsers();
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const { masters, loading: mastersLoading, createMaster } = useMasters();
+  const { loading: mastersLoading, createMaster } = useMasters();
 
   const [newMaster, setNewMaster] = useState({
     name: '',
@@ -73,6 +79,7 @@ export default function UserManagement() {
       setCreating(true);
       await createMaster(newMaster);
       setNewMaster({ name: '', email: '', specialization: '', phone: '' });
+      alert('Мастер добавлен')
     } catch {
    
     } finally {
@@ -113,10 +120,10 @@ export default function UserManagement() {
 
   return (
     <UserCont>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6">
         Добавить нового мастера
       </Typography>
-      <Box display="flex" gap={2} flexWrap="wrap" mb={4}>
+      <CreateMasterCont>
         <TextField
           label="Имя"
           value={newMaster.name}
@@ -141,15 +148,13 @@ export default function UserManagement() {
           onChange={handleNewMasterChange('phone')}
           size="small"
         />
-        <Button
-          variant="contained"
+        <SubmitButton
           onClick={handleAddMaster}
-          disabled={creating}
         >
           {creating ? 'Добавление…' : 'Добавить мастера'}
-        </Button>
-      </Box>
-      <Typography variant="h6" gutterBottom>
+        </SubmitButton>
+      </CreateMasterCont>
+      <Typography variant="h6" >
         Управление пользователями
       </Typography>
 
@@ -169,7 +174,6 @@ export default function UserManagement() {
               <TableCell>Email</TableCell>
               <TableCell>Имя</TableCell>
               <TableCell>Роль</TableCell>
-              <TableCell>Телефон</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -193,17 +197,6 @@ export default function UserManagement() {
                     </Select>
                   )}
                 </TableCell>
-                {user.role === 'master' && (
-                  <TableCell>
-                    
-                    <TextField
-                    size='small'
-                    label = 'Номер телефона'
-                    
-                    />
-                  </TableCell>
-                  )            
-                  }
               </TableRow>
             ))}
 

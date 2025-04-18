@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
-import styled from "styled-components";
 import { Wrapper } from "../Wrapper/Wrapper";
-import { FeedbackButton } from "../Header/HeaderStyles";
 import { HeroCont, OfferButton, OfferButtonTextBold, OfferCont, OfferText, OfferTitle } from "./HeroStyles";
 
 

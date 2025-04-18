@@ -2,7 +2,6 @@
 import { useSession } from "next-auth/react";
 import { Wrapper } from "../Wrapper/Wrapper";
 import { StyledLink, NotLink, LinksCont } from "./LinksStyles";
-import { use, useEffect } from "react";
 
 const Links = () => {
   const { data: session } = useSession();

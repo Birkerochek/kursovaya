@@ -1,27 +1,19 @@
 "use client";
-
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useApplications } from "./hooks/useApplications";
 import { useMasters } from "./hooks/useMasters";
 import { ApplicationsList } from "./components/ApplicationsList";
-import MainBackButton from "@/app/UI/MainBackButton";
-import UserManagement from "./components/UserManagement";
 import styled from "styled-components";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 import { StyledLink } from "../components/Links/LinksStyles";
 
 const AdminContainer = styled.div`
-
-
 `
-
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const isAdmin = session?.user?.role === "admin";
-  const router = useRouter();
-
+  console.log(session?.user?.role)
   const {
     applications,
     loading,
