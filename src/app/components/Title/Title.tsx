@@ -4,7 +4,7 @@ const StyledTitle = styled.p`
     font-family: var(--font-family);
 font-weight: 400;
 font-size: 45px;
-color: #000;
+color: var(--color-black);
 margin: 40px 0;
 `
 type TitleProps = {

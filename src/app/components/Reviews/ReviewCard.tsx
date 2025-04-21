@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import { ReviewCardProps } from '@/app/pages/reviews/hooks/useReviewsFetch';
 
 const Card = styled.div`
 position: relative;
-  background: white;
+  background: var(--color-white);
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -21,7 +22,7 @@ const ReviewHeader = styled.div`
 
 const ReviewerName = styled.h4`
   margin: 0;
-  color: #1b3764;
+  color: var(--color-help);
   font-size: 18px;
 `;
 
@@ -32,7 +33,7 @@ const ReviewDate = styled.span`
 
 const ReviewText = styled.p`
   margin: 10px 0;
-  color: #333;
+  color: var(--color-grey);
   line-height: 1.5;
 `;
 const DeleteButton = styled.button`
@@ -40,7 +41,7 @@ const DeleteButton = styled.button`
   right: 20px;
   top: 80px;
   background-color: red;
-  color: #fff;
+  color: var(--color-white);
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -50,17 +51,7 @@ const DeleteButton = styled.button`
     opacity: 0.9;
   }
 `;
-export interface ReviewCardProps {
-  id: number;
-  name: string;
-  rating: number;
-  text: string;
-  created_at: string;
-   
-    isAdmin?: boolean;
-    
-    onDelete?: (id: number) => void;
-}
+
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ id, name, rating, text, created_at, isAdmin = false, onDelete, }) => {
   const date = new Date(created_at).toLocaleDateString('ru-RU', {

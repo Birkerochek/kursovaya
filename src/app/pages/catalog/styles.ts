@@ -67,7 +67,7 @@ export const ServiceTitle = styled.h3`
   font-family: var(--font-family);
   font-weight: 700;
   font-size: clamp(16px, 2.5vw, 20px);
-  color: #000;
+  color: var(--color-black);
   margin: 0;
 `;
 
@@ -75,7 +75,7 @@ export const ServiceDescription = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: clamp(12px, 2vw, 15px);
-  color: #000;
+  color: var(--color-black);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -88,7 +88,7 @@ export const ServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #163E72;
+  background: var(--color-help);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,7 +111,7 @@ export const MoreContainerText = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: clamp(12px, 2vw, 15px);
-  color: #000;
+  color: var(--color-black);
 `;
 
 export const MoreContainerIcon = styled.img`
@@ -123,7 +123,7 @@ export const ServicePrice = styled.p`
   font-family: var(--font-family);
   font-weight: 200;
   font-size: clamp(10px, 1.8vw, 13px);
-  color: #fff;
+  color: var(--color-white);
 `;
 
 export const LoadingMessage = styled.div`
@@ -173,7 +173,7 @@ export const AllServiceTitle = styled.p`
   font-family: var(--font-family);
   font-weight: 700;
   font-size: clamp(16px, 2.5vw, 20px);
-  color: #000;
+  color: var(--color-black);
   margin: 0;
 `;
 
@@ -181,7 +181,7 @@ export const AllServiceDescription = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: clamp(12px, 2vw, 15px);
-  color: #000;
+  color: var(--color-black);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -194,7 +194,7 @@ export const AllServicePriceContainer = styled.div`
   border-radius: 10px;
   width: clamp(80px, 10vw, 104px);
   height: clamp(24px, 4vw, 30px);
-  background: #163E72;
+  background: var(--color-help);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,7 +220,7 @@ export const AllMoreContainerText = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: clamp(12px, 2vw, 15px);
-  color: #000;
+  color: var(--color-black);
 `;
 
 export const AllMoreContainerIcon = styled.img`
@@ -234,11 +234,11 @@ export const AllServicePrice = styled.p`
   font-family: var(--font-family);
   font-weight: 200;
   font-size: clamp(10px, 1.8vw, 13px);
-  color: #fff;
+  color: var(--color-white);
 `;
 
 export const Mark = styled.mark`
-background: #2573D8;
+background: var(--color-accent);
 border-radius: 5px;
 padding: 2px 5px;
 color: #fff;
@@ -249,7 +249,7 @@ export const AllServiceCard = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #000;
+  border: 1px solid var(--color-black);
   border-radius: 15px;
   padding: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);

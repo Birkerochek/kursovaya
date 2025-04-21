@@ -3,10 +3,10 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useApplications } from "./hooks/useApplications";
 import { useMasters } from "./hooks/useMasters";
-import { ApplicationsList } from "./components/ApplicationsList";
 import styled from "styled-components";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 import { StyledLink } from "../components/Links/LinksStyles";
+import { ApplicationsList } from "./components/ApplicationsList/ApplicationsList";
 
 const AdminContainer = styled.div`
 `

@@ -41,7 +41,7 @@ export const OfferTitle = styled.p`
   font-family: var(--font-family);
   font-weight: 700;
   font-size: 40px;
-  color: #fff;
+  color: var(--color-white);
   width: 700px;
   margin: 0 0;
 
@@ -65,7 +65,7 @@ export const OfferText = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 20px;
-  color: #fff;
+  color: var(--color-white);
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -78,8 +78,8 @@ export const OfferText = styled.p`
 
 export const OfferButton = styled(FeedbackButton)`
   border-radius: 10px;
-  width: 269px;
-  height: 72px;
+  width: 230px;
+  height: 70px;
   text-align: left;
   padding-left: 20px;
 
@@ -98,7 +98,7 @@ export const OfferButtonTextBold = styled.span`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 20px;
-  color: #fff;
+  color: var(--color-white);
   font-weight: 700;
 
   @media (max-width: 768px) {

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 
 export const FooterContainer = styled.footer`
-  background-color: #0B5C7E;
+  background-color: var(--color-primary);
   padding: 4rem 0 2rem;
   margin-top: 4rem;
   color: #fff;
@@ -44,14 +44,14 @@ export const FooterSection = styled.div`
     font-weight: 400;
     font-size: 1rem;
     margin: 0.3rem 0;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-white-grey);
     line-height: 1.6;
   }
 `;
 
 export const FooterLink = styled(Link)`
   font-family: var(--font-family);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-white-grey);
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 1rem;
@@ -59,7 +59,7 @@ export const FooterLink = styled(Link)`
   margin: 0.5rem 0;
 
   &:hover {
-    color: #2573d8;
+    color: var(--color-accent);
   }
 `;
 
@@ -68,11 +68,11 @@ export const FooterBottom = styled.div`
   text-align: center;
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-grey-white);
 
   p {
     font-family: var(--font-family);
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-grey-white);
     font-size: 0.9rem;
   }
 `;

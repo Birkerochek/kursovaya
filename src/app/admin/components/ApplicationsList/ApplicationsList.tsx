@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography, Box, Container } from "@mui/material";
-import { ApplicationCard } from "./ApplicationCard";
-import { Application, Master } from "../types";
-import { Grid } from "./StyledComponents";
 import { Wrapper } from "@/app/components/Wrapper/Wrapper";
+import { Grid } from "../StyledComponents";
+import { ApplicationCard } from "../ApplicationCard/ApplicationCard";
+import { Application, Master } from "../../types";
 
 interface ApplicationsListProps {
   applications: Application[];

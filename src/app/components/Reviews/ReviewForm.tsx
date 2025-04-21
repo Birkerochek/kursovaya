@@ -11,12 +11,12 @@ const Form = styled.form`
   margin: 0 auto 30px;
   padding: 20px;
   border-radius: 8px;
-  background-color: #f5f5f5;
+  background-color: var(--color-grey-white);
 `;
 
 const TextArea = styled.textarea`
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-white);
   border-radius: 4px;
   min-height: 100px;
   font-family: inherit;
@@ -35,7 +35,7 @@ const RatingLabel = styled.label`
 
 const SubmitButton = styled.button`
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: var(--color-accent);
   color: white;
   border: none;
   border-radius: 4px;
@@ -43,7 +43,7 @@ const SubmitButton = styled.button`
   font-weight: 500;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary);
   }
 `;
 

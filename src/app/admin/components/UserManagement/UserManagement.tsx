@@ -1,5 +1,3 @@
-import { useState, ChangeEvent } from 'react';
-import { useUsers } from '../hooks/useUsers';
 import { 
   Table, 
   TableBody, 
@@ -13,100 +11,18 @@ import {
   Typography,
   TextField,
 } from '@mui/material';
-import styled from 'styled-components';
-import { useMasters } from '../hooks/useMasters';
+import { useUsers } from '../../hooks/useUsers';
+import { CreateMasterCont, LoadingWrapper, SubmitButton, UserCont } from '../StyledComponents';
+import useAddMaster from './hooks/useAddMaster';
+import useUsersSearch from './hooks/useUsersSearch';
+import { use, useEffect } from 'react';
 
-const UserCont = styled.div`
-  margin: 20px 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 5px 8px rgba(0,0,0,0.3);
-`;
 
-const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-`;
-
-const CreateMasterCont = styled.div`
-  display: flex;
-  gap: 32px;
-  flex-wrap:wrap;
-  margin-bottom: 50px;
-
-`
-
-const SubmitButton = styled.div`
-background: #2573D8;
-color: #fff;
-height: 40px;
-width:150px;
-font-size: 14px;
-border-radius: 5px;
-display: flex;
-justify-content: center;
-align-items: center;
-cursor: pointer;
-transition: .3s;
-
-&:hover{
-  background: #0B5C7E;
-}
-`
 export default function UserManagement() {
-  const { users, loading, updateUserRole } = useUsers();
-  const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const { loading: mastersLoading, createMaster } = useMasters();
-
-  const [newMaster, setNewMaster] = useState({
-    name: '',
-    email: '',
-    specialization: '',
-    phone: '',
-  });
-  const [creating, setCreating] = useState(false);
-
-  const handleNewMasterChange = (field: keyof typeof newMaster) => 
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setNewMaster(prev => ({ ...prev, [field]: e.target.value }));
-    };
-
-  const handleAddMaster = async () => {
-    try {
-      setCreating(true);
-      await createMaster(newMaster);
-      setNewMaster({ name: '', email: '', specialization: '', phone: '' });
-      alert('Мастер добавлен')
-    } catch {
-   
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  const handleRoleChange = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
-    try {
-      setUpdatingUserId(userId);
-      await updateUserRole(userId, newRole);
-    } finally {
-      setUpdatingUserId(null);
-    }
-  };
-
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const filteredUsers = searchQuery.trim()
-    ? users.filter((user) => 
-        user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        user.email.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : users;
+  const { loading } = useUsers();
+  const { handleAddMaster, creating, newMaster, handleNewMasterChange } = useAddMaster();
+  const { handleSearchChange, filteredUsers, searchQuery, updatingUserId, handleRoleChange } = useUsersSearch();
+ 
 
   if (loading) {
     return (

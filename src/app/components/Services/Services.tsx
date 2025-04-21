@@ -4,40 +4,10 @@ import Title from "../Title/Title";
 import { Wrapper } from "../Wrapper/Wrapper";
 import { ServicesCont, ServiceItem, ServiceItemImage, ServiceItemText } from "./ServicesStyles";
 import { Service } from "@/app/lib/supabase/serviceApi";
+import useFetchServices from "./hooks/useFetchServices";
 
 const Services = () => {
-  const [servicesData, setServicesData] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch("/api/services", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Ошибка при получении услуг");
-        }
-
-        const data: Service[] = await response.json();
-        setServicesData(data);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-        setError(
-          error instanceof Error ? error.message : "Неизвестная ошибка"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
+  const {error, loading, servicesData} = useFetchServices()
 
   if (loading) {
     return <div>Загрузка услуг...</div>;

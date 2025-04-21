@@ -8,7 +8,7 @@ export const HeaderWrapper = styled.header`
   z-index: 1000;
   max-width: 99%;
   margin: 0 auto;
-  background: #0b5c7e;
+  background: var(--color-primary);
   padding: 0 20px;
   height: 130px;
   border-radius: 16px;
@@ -94,7 +94,7 @@ export const Left = styled.div`
 `;
 
 export const FindService = styled.input`
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   border-radius: 12px;
   width: 30%;
   height: 40px;
@@ -103,14 +103,15 @@ export const FindService = styled.input`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 16px;
-  color: #fff;
+  color: var(--color-white);
   transition: height 0.3s ease, font-size 0.3s ease;
 
   &::placeholder {
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 16px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-grey-white);
+    opacity: 0.7;
   }
 
   @media (max-width: 1024px) {
@@ -147,14 +148,15 @@ export const SearchResults = styled.div`
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 0 0 12px 12px;
+  background: var(--color-white);
+  border: 1px solid var(--color-white);
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
+  width: 32.4%;
 
   @media (max-width: 768px) {
     border-radius: 0 0 10px 10px;
@@ -165,12 +167,12 @@ export const SearchResults = styled.div`
 export const SearchResultItem = styled.div`
   padding: 10px 15px;
   cursor: pointer;
-  color: #333;
+  color: var(--color-grey);
   font-size: 14px;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #f7f7f7;
+    background-color: var(--color-grey-white);
   }
 
   &:last-child {
@@ -207,7 +209,7 @@ export const FeedbackText = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 16px;
-  color: #fff;
+  color: var(--color-white);
   white-space: nowrap;
 
   @media (max-width: 1024px) {
@@ -223,17 +225,17 @@ export const FeedbackButton = styled.button`
   border-radius: 8px;
   width: 160px;
   height: 36px;
-  background: #2573d8;
+  background: var(--color-accent);
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
   border: none;
   transition: background 0.3s ease;
 
   &:hover {
-    background: #1954a0;
+    background: var(--color-help);
   }
 
   @media (max-width: 1024px) {
@@ -253,7 +255,7 @@ export const MenuButton = styled.button`
   display: none;
   background: none;
   border: none;
-  color: #fff;
+  color: var(--color-white);
   font-size: 24px;
   cursor: pointer;
 
@@ -266,26 +268,74 @@ export const MenuButton = styled.button`
   }
 `;
 
+export const NoResults = styled.p`
+font-size: 14px;
+color: var(--color-grey);
+padding: 10px 15px;
+
+`
+export const MobileHeaderWrapper = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #0b5c7e;
+  padding: 0 10px;
+  height: 110px;
+  border-radius: 10px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+export const MobileHeaderCont = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+
+
+
+
 export const MobileMenu = styled.div`
-  display: none;
   position: absolute;
-  top: 100%;
+  top: 110%;
   right: 10px;
   background: #0b5c7e;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  padding: 10px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
   flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
+  gap: 10px;
+  z-index: 1001;
+`;
 
-  @media (max-width: 768px) {
-    display: flex;
-  }
+export const MenuText = styled.p`
+  color: #fff;
+  margin: 0;
+  font-size: 14px;
+`;
 
-  @media (max-width: 480px) {
-    padding: 15px;
-    right: 8px;
+export const MenuButtonFeedback = styled.button`
+  border: none;
+  border-radius: 8px;
+  background: #2573d8;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  
+  &:hover {
+    background: #1954a0;
   }
 `;

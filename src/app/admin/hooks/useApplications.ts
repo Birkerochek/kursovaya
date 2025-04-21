@@ -1,4 +1,3 @@
-// hooks/useApplications.ts
 import { useState } from "react";
 import { Application } from "../types";
 

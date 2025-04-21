@@ -44,20 +44,20 @@ align-items: center;
 `
 export const ServiceTitle = styled.h1`
   font-size: 2.5rem;
-  color: #163E72;
+  color: var(--color-help);
   margin-bottom: 1rem;
 `;
 
 export const ServiceDescription = styled.p`
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #333;
+  color: var(--color-grey);
   
 `;
 
 export const PriceContainer = styled.div`
-  background: #163E72;
-  color: white;
+  background: var(--color-help);
+  color: var(--color-white);
   padding: 1rem 2rem;
   border-radius: 10px;
   display: inline-block;
@@ -71,8 +71,8 @@ export const Price = styled.span`
 `;
 
 export const OrderButton = styled.button`
-  background: #2573d8;
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-white);
   padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
@@ -82,6 +82,6 @@ export const OrderButton = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background: #152a4d;
+    background: var(--color-help);
   }
 `;

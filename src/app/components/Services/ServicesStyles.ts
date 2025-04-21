@@ -18,7 +18,7 @@ export const ServicesCont = styled.div`
 
 export const ServiceItem = styled(Link)`
   text-decoration: none;
-  border: 1px solid #000;
+  border: 1px solid var(--color-black);
   border-radius: 15px;
   width: 447px;
   height: 308px;
@@ -70,7 +70,7 @@ export const ServiceItemText = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 20px;
-  color: #000;
+  color: var(--color-black);
   text-align: center;
   padding: 0 10px;
 

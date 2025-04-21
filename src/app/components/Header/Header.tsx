@@ -17,9 +17,11 @@ import {
   SearchResultItem,
   MenuButton,
   MobileMenu,
+  NoResults,
 } from "./HeaderStyles";
 import Link from "next/link";
 import { Service } from "@/app/lib/supabase/serviceApi";
+import SearchBar from "./SearchBar";
 
 interface ISearchResult {
   id: number;
@@ -28,45 +30,8 @@ interface ISearchResult {
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<ISearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const searchServices = async () => {
-      if (searchQuery.trim() === "") {
-        setSearchResults([]);
-        return;
-      }
-
-
-      setIsSearching(true);
-      try {
-        const response = await fetch(`/api/services?query=${encodeURIComponent(searchQuery)}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Ошибка при поиске услуг");
-        }
-
-        const data: Pick<Service, "id" | "title">[] = await response.json();
-        setSearchResults(data);
-      } catch (error) {
-        console.error("Error searching services:", error);
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    };
-
-    const debounceTimer = setTimeout(searchServices, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [searchQuery]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -79,28 +44,7 @@ const Header = () => {
           <LogoCont href="/">
             <Logo src="/logo.svg" alt="Логотип" loading="lazy" />
           </LogoCont>
-          <div style={{ position: "relative", flex: 1 }}>
-            <FindService
-              placeholder="Найти услугу"
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Поиск услуг"
-            />
-            {searchResults.length > 0 && (
-              <SearchResults>
-                {searchResults.map((service) => (
-                  <Link
-                    href={`/pages/catalog/${service.id}`}
-                    key={service.id}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <SearchResultItem>{service.title}</SearchResultItem>
-                  </Link>
-                ))}
-              </SearchResults>
-            )}
-          </div>
+          <SearchBar/>
         </Left>
 
         <MenuButton onClick={toggleMobileMenu} aria-label="Toggle menu">

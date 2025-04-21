@@ -20,11 +20,11 @@ export const DeleteButton = styleMui(IconButton)({
 export const StatusChip = styled.div<{ status: string }>`
   background-color: ${({ status }) =>
     status === "approved"
-      ? "#4caf50"
+      ? "var(--color-approved)"
       : status === "rejected"
-      ? "#f44336"
-      : "#ff9800"};
-  color: white;
+      ? "var(--color-rejected)"
+      : "var(--color-pending)"};
+  color: var(--color-white);
   width: 100px;
   height: 30px;
   display: flex;
@@ -34,7 +34,7 @@ export const StatusChip = styled.div<{ status: string }>`
 `;
 export const StatusText = styled.p`
   font-size: 14px;
-  color: #fff;
+  color: var(--color-white);
 `
 
 export const Grid = styled.div`
@@ -45,4 +45,43 @@ export const Grid = styled.div`
   
   
   
+`
+export const UserCont = styled.div`
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 8px rgba(0,0,0,0.3);
+`;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+`;
+
+export const CreateMasterCont = styled.div`
+  display: flex;
+  gap: 32px;
+  flex-wrap:wrap;
+  margin-bottom: 50px;
+
+`
+
+export const SubmitButton = styled.div`
+background: var(--color-accent);
+color: var(--color-white);
+height: 40px;
+width:150px;
+font-size: 14px;
+border-radius: 5px;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+transition: .3s;
+
+&:hover{
+  background: var(--color-primary);
+}
 `

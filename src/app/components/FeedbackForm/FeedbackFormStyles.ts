@@ -4,7 +4,7 @@ export const FeedbackCont = styled.div`
   border-radius: 20px;
   width: 650px;
   height: 850px;
-  background: #0b5c7e;
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -26,7 +26,7 @@ export const NoAuthorization = styled.div`
   border-radius: 20px;
   width: 650px;
   height: 350px;
-  background: #0b5c7e;
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -48,7 +48,7 @@ export const FeedbackTitle = styled.p`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 45px;
-  color: #fff;
+  color: var(--color-white);
   margin: 40px 0;
   text-align: center;
 
@@ -78,7 +78,7 @@ export const FeedbackFormCont = styled.form`
 `;
 
 export const FeedbackInput = styled.input`
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   border-radius: 20px;
   width: 536px;
   height: 60px;
@@ -89,7 +89,7 @@ export const FeedbackInput = styled.input`
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 20px;
-    color: #a5a5a5;
+    color: var(--color-grey-white);
   }
 
   @media (max-width: 768px) {
@@ -112,7 +112,7 @@ export const FeedbackInput = styled.input`
 `;
 
 export const FeedbackTextarea = styled.textarea`
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   border-radius: 20px;
   width: 516px;
   height: 200px;
@@ -123,7 +123,7 @@ export const FeedbackTextarea = styled.textarea`
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 20px;
-    color: #a5a5a5;
+    color: var(--color-grey-white);
   }
 
   @media (max-width: 768px) {
@@ -150,7 +150,7 @@ export const FeedbackButton = styled.button`
   border-radius: 10px;
   width: 215px;
   height: 51px;
-  background: #2573d8;
+  background: var(--color-accent);
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 20px;
@@ -160,7 +160,7 @@ export const FeedbackButton = styled.button`
   border: none;
 
   &:hover {
-    background: #1954a0;
+    background: var(--color-help);
   }
 
   @media (max-width: 768px) {
@@ -178,7 +178,7 @@ export const FeedbackButton = styled.button`
 `;
 
 export const ErrorMessage = styled.span`
-  color: #ff6b6b;
+  color: var(--color-rejected);
   font-size: 14px;
   margin-top: -10px;
   margin-bottom: 10px;
@@ -200,7 +200,7 @@ export const NoAuthorizationText = styled.div`
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 35px;
-  color: #fff;
+  color: var(--color-white);
   margin: 40px 0;
   text-align: center;
 

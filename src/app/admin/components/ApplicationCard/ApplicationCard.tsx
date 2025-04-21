@@ -1,4 +1,3 @@
-import React, { use } from "react";
 import {
   CardContent,
   Select,
@@ -8,10 +7,12 @@ import {
   Stack,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import { StyledCard, DeleteButton, StatusText, StatusChip } from "./StyledComponents";
-import { Application, Master } from "../types";
 import { sendTelegramMessage } from "@/app/lib/telegram";
 import { useSession } from "next-auth/react";
+import { Application, Master } from "../../types";
+import { DeleteButton, StatusChip, StatusText, StyledCard } from "../StyledComponents";
+import useStatusChange from "./hooks/useStatusChange";
+import useMasterAssign from "./hooks/useMasterAssign";
 
 
 interface ApplicationCardProps {
@@ -22,76 +23,19 @@ interface ApplicationCardProps {
   onDelete: (id: number) => void;
 }
 
-const getStatusLabel = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "В обработке";
-    case "approved":
-      return "Одобрено";
-    case "rejected":
-      return "Отклонено";
-    default:
-      return status;
-  }
-};
+
 
 export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   application,
   masters,
-  onStatusChange,
   onAssignMaster,
+  onStatusChange,
   onDelete,
 }) => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin";
-  const handleStatusChange = async (applicationId: number, newStatus: Application['status']) => {
-    try {
-      await onStatusChange(applicationId, newStatus);
-      
-      const statusMessage = `
-  📋 Обновление заявки #${applicationId}
-  
-  👤 Клиент: ${application.name}
-  📱 Телефон: ${application.phone}
-  ${application.email ? `✉️ Email: ${application.email}` : ''}
-  🔧 Услуга: ${application.techType}
-  📝 Сообщение: ${application.description}
-  
-  📊 Новый статус: ${getStatusLabel(newStatus)}
-  
-  #обновление_заявки`.trim();
-  
-      await sendTelegramMessage(statusMessage);
-    } catch (error) {
-      console.error('Error sending status change notification:', error);
-    }
-  };
-  
-  const handleMasterAssign = async (applicationId: number, masterId: number) => {
-    try {
-      await onAssignMaster(applicationId, masterId);
-      
-      const selectedMaster = masters.find(m => m.id === masterId);
-      const masterMessage = `
-  📋 Обновление заявки #${applicationId}
-  
-  👤 Клиент: ${application.name}
-  📱 Телефон: ${application.phone}
-  ${application.email ? `✉️ Email: ${application.email}` : ''}
-  🔧 Услуга: ${application.techType}
-  📝 Сообщение: ${application.description}
-  
-  👨‍🔧 Назначенный мастер:
-  👤 ${selectedMaster ? selectedMaster.name : 'Не назначен'}
-  🛠️ ${selectedMaster ? selectedMaster.specialization : ''}
-  
-  #обновление_заявки`.trim();
-  
-      await sendTelegramMessage(masterMessage);
-    } catch (error) {
-      console.error('Error sending master assignment notification:', error);
-    }
-  };
+  const { handleStatusChange, getStatusLabel } = useStatusChange({ application, onStatusChange });
+  const { handleMasterAssign } = useMasterAssign({ application, masters, onAssignMaster });
   return (
     <StyledCard>
       <DeleteButton

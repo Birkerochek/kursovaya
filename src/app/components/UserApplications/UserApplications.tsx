@@ -7,8 +7,8 @@ const ApplicationsContainer = styled.div`
 `;
 
 const ApplicationCard = styled.div`
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--color-white);
+  border: 1px solid var(--color-grey-white);
   border-radius: 10px;
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -18,7 +18,7 @@ const ApplicationCard = styled.div`
 const ApplicationTitle = styled.h3`
   font-family: var(--font-family);
   font-size: 1.2rem;
-  color: #1b3764;
+  color: var(--color-help);
   margin: 0 0 1rem 0;
 `;
 
@@ -30,24 +30,24 @@ const ApplicationStatus = styled.span<{ status: string }>`
   margin-left: 1rem;
   background-color: ${props => {
     switch (props.status) {
-      case 'pending': return '#ff9800';
-      case 'approved': return '#4caf50';
-      case 'rejected': return '#f44336';
-      default: return '#e0e0e0';
+      case 'pending': return 'var(--color-pending)';
+      case 'approved': return 'var(--color-approved)';
+      case 'rejected': return 'var(--color-rejected)';
+      default: return 'var(--color-grey-white)';
     }
   }};
-  color: #fff;
+  color: var(--color-white);
 `;
 
 const ApplicationDetails = styled.div`
   margin-top: 1rem;
   font-size: 1rem;
-  color: #333;
+  color: var(--color-grey);
 `;
 
 const NoApplications = styled.p`
   text-align: center;
-  color: #666;
+  color: var(--color-grey);
   font-size: 1.1rem;
   margin: 2rem 0;
 `;

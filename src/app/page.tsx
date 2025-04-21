@@ -6,6 +6,7 @@ import Services from "./components/Services/Services";
 import AboutUs from "./components/AboutUs/AboutUs";
 import FeedbackForm from "./components/FeedbackForm/FeedbackForm";
 import UserApplications from "./components/UserApplications/UserApplications";
+import Questions from "./components/Questions/Questions";
 
 const page = () => {
   return (
@@ -17,6 +18,7 @@ const page = () => {
       <Services />
       <AboutUs />
       <FeedbackForm />
+      <Questions/>
     </div>
   );
 };
