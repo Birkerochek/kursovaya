@@ -84,30 +84,28 @@ export const FeedbackInput = styled.input`
   height: 60px;
   background: none;
   padding-left: 20px;
-
+  color: var(--color-white);
+  font-size: 20px;
   &::placeholder {
     font-family: var(--font-family);
     font-weight: 400;
-    font-size: 20px;
-    color: var(--color-grey-white);
+    color: var(--color-light-grey);
   }
 
   @media (max-width: 768px) {
     width: 80%;
     height: 50px;
-    
-    &::placeholder {
-      font-size: 16px;
-    }
+    font-size: 16px;
+
+ 
   }
 
   @media (max-width: 480px) {
     height: 45px;
     border-radius: 15px;
-    
-    &::placeholder {
-      font-size: 14px;
-    }
+    font-size: 14px;
+
+   
   }
 `;
 
@@ -118,21 +116,22 @@ export const FeedbackTextarea = styled.textarea`
   height: 200px;
   padding: 20px;
   background: none;
+  color: var(--color-white);
+  font-size: 20px;
+
 
   &::placeholder {
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 20px;
-    color: var(--color-grey-white);
+    color: var(--color-light-grey);
   }
 
   @media (max-width: 768px) {
     width: 76%;
     height: 180px;
-    
-    &::placeholder {
-      font-size: 16px;
-    }
+    font-size: 16px;
+
   }
 
   @media (max-width: 480px) {
@@ -140,9 +139,7 @@ export const FeedbackTextarea = styled.textarea`
     border-radius: 15px;
     padding: 15px;
     
-    &::placeholder {
-      font-size: 14px;
-    }
+    font-size: 14px;
   }
 `;
 

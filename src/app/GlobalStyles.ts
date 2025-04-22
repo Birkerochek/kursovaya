@@ -22,6 +22,7 @@ export const GlobalStyles = createGlobalStyle`
   --color-pending: #ff9800;
   --color-approved: #4caf50;
   --color-rejected: #f44336;
+  --color-light-grey: #a5a5a5;
 }
 
 body{

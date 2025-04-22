@@ -85,3 +85,9 @@ transition: .3s;
   background: var(--color-primary);
 }
 `
+
+export const TitlesAdmin = styled.div`
+display: flex;
+gap: 40px;
+align-items: center;
+`

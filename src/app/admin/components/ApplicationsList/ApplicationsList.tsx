@@ -28,9 +28,6 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
 
   return (
     <Wrapper>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Управление заявками
-      </Typography>
       <Grid>
         {applications.map((application) => (
           <ApplicationCard

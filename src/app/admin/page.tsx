@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 import { StyledLink } from "../components/Links/LinksStyles";
 import { ApplicationsList } from "./components/ApplicationsList/ApplicationsList";
+import { TitlesAdmin } from "./components/StyledComponents";
+import { Typography } from "@mui/material";
 
 const AdminContainer = styled.div`
 `
@@ -46,11 +48,17 @@ export default function AdminPage() {
   return (
     <Wrapper>
       <AdminContainer>
+        <TitlesAdmin>
+                <Typography variant="h4" component="h1" gutterBottom>
+                  Управление заявками
+                </Typography>
+          
           {isAdmin &&
           <div>
             <StyledLink href={"/admin/users"}>Управление пользователями</StyledLink>
           </div>
           }
+        </TitlesAdmin>
         <div>
           <ApplicationsList
             applications={applications}
