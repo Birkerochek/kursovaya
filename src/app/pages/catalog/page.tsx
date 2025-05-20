@@ -31,9 +31,9 @@ import {
   AllServicePrice,
 } from "./styles";
 import BackButton from "@/app/UI/BackButton";
-import Link from "next/link";
 import { Service } from "@/app/lib/supabase/serviceApi";
 import useCatalogFetch from "./hooks/useCatalogFetch";
+import { createErrorHandler } from "@/app/utils/fetchError";
 
 const ServiceCard = ({
   service,
@@ -61,10 +61,10 @@ const ServiceCard = ({
 );
 
 const ServicesPage = () => {
-  const { loading, error, services } = useCatalogFetch()
-
-  if (loading) return <LoadingMessage>Загрузка услуг...</LoadingMessage>;
-  if (error) return <ErrorMessage>{error}</ErrorMessage>;
+  const getServiceError = createErrorHandler("услуг")
+  const { isLoading,isError, error, data: services = [] } = useCatalogFetch()
+  if (isLoading) return <LoadingMessage>Загрузка услуг...</LoadingMessage>;
+  if (isError) return <ErrorMessage>{getServiceError(error)}</ErrorMessage>;
 
   return (
     <Wrapper>

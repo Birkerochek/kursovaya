@@ -1,44 +1,26 @@
 import { Service } from "@/app/lib/supabase/serviceApi";
-import { useEffect, useState } from "react";
-
-
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 export default function useCatalogFetch(){
-      const [services, setServices] = useState<Service[]>([]);
-      const [loading, setLoading] = useState(true);
-      const [error, setError] = useState<string | null>(null);
-    
-      useEffect(() => {
-        const fetchServices = async () => {
-          try {
-            const response = await fetch("/api/services", {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-    
-            if (!response.ok) {
-              throw new Error("Ошибка при получении услуг");
-            }
-    
-            const data: Service[] = await response.json();
-            setServices(data);
-          } catch (error) {
-            console.error("Error fetching services:", error);
-            setError(
-              error instanceof Error ? error.message : "Неизвестная ошибка"
-            );
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        fetchServices();
-      }, []);
+   
+
+      const { isLoading, error, data, isError } = useQuery({
+        queryKey: ['services'],
+        queryFn: async() =>{
+          const { data } = await axios.get<Service[]>("/api/services", {
+          });
+          return data;
+          
+        },
+        staleTime: 1000 * 60 * 5,
+        retry: 1,
+        
+      })
     
       return{
-        loading,
+        isLoading,
         error,
-        services
+        data,
+        isError
       }
 }
