@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 interface User {
@@ -9,21 +11,16 @@ interface User {
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/users');
-      if (!response.ok) throw new Error('Failed to fetch users');
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    } finally {
-      setLoading(false);
+  const { isLoading, error, data, isError } = useQuery({
+    queryKey: ['users'],
+    queryFn: async() => {
+      const { data } = await axios.get<User[]>('/api/users')
+      return data
     }
-  };
+  })
+
+
 
   const updateUserRole = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
     try {
@@ -47,9 +44,7 @@ export function useUsers() {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
-  return { users, loading, fetchUsers, updateUserRole };
+
+  return { updateUserRole, isLoading, data, error, isError };
 }

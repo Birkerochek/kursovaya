@@ -2,7 +2,7 @@ import { useUsers } from "@/app/admin/hooks/useUsers";
 import { ChangeEvent, useState } from "react";
 
 export default function useUsersSearch() {
-  const { users, updateUserRole } = useUsers();
+  const { updateUserRole, data = [] } = useUsers();
     const [searchQuery, setSearchQuery] = useState("");
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const handleRoleChange = async (userId: string, newRole: 'user' | 'admin' | 'master') => {
@@ -19,11 +19,11 @@ export default function useUsersSearch() {
   };
 
   const filteredUsers = searchQuery.trim()
-    ? users.filter((user) => 
+    ? data.filter((user) => 
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         user.email.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : users;
+    : data;
 
     return {
         handleSearchChange,

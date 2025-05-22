@@ -7,8 +7,7 @@ export default function useCatalogFetch(){
       const { isLoading, error, data, isError } = useQuery({
         queryKey: ['services'],
         queryFn: async() =>{
-          const { data } = await axios.get<Service[]>("/api/services", {
-          });
+          const { data } = await axios.get<Service[]>("/api/services");
           return data;
           
         },

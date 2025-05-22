@@ -21,12 +21,12 @@ import { StyledLink } from '@/app/components/Links/LinksStyles';
 
 
 export default function UserManagement() {
-  const { loading } = useUsers();
+  const { isLoading } = useUsers();
   const { handleAddMaster, creating, newMaster, handleNewMasterChange } = useAddMaster();
   const { handleSearchChange, filteredUsers, searchQuery, updatingUserId, handleRoleChange } = useUsersSearch();
 
 
-  if (loading) {
+  if (isLoading) {
     return (
       <UserCont>
         <LoadingWrapper>
@@ -35,6 +35,8 @@ export default function UserManagement() {
       </UserCont>
     );
   }
+
+  
 
   return (
     <>
